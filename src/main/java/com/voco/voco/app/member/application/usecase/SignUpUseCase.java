@@ -3,13 +3,13 @@ package com.voco.voco.app.member.application.usecase;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.voco.voco.common.interfaces.PasswordAdaptor;
 import com.voco.voco.app.member.application.usecase.dto.in.SignUpUseCaseDto;
 import com.voco.voco.app.member.domain.interfaces.MemberCommandRepository;
 import com.voco.voco.app.member.domain.interfaces.MemberQueryRepository;
 import com.voco.voco.app.member.domain.model.MemberEntity;
 import com.voco.voco.common.enums.ApiErrorType;
 import com.voco.voco.common.exception.CoreException;
+import com.voco.voco.common.interfaces.PasswordAdaptor;
 
 import lombok.RequiredArgsConstructor;
 

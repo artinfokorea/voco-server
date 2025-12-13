@@ -1,8 +1,11 @@
 package com.voco.voco.app.member.infrastructure.repository;
 
+import java.util.Optional;
+
 import org.springframework.stereotype.Repository;
 
 import com.voco.voco.app.member.domain.interfaces.MemberQueryRepository;
+import com.voco.voco.app.member.domain.model.MemberEntity;
 
 import lombok.RequiredArgsConstructor;
 
@@ -15,5 +18,10 @@ public class MemberQueryRepositoryImpl implements MemberQueryRepository {
 	@Override
 	public boolean existsByEmail(String email) {
 		return memberJpaRepository.existsByEmail(email);
+	}
+
+	@Override
+	public Optional<MemberEntity> findByEmail(String email) {
+		return memberJpaRepository.findByEmail(email);
 	}
 }

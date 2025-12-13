@@ -4,6 +4,10 @@ import org.springframework.security.core.Authentication;
 
 public interface JwtAdaptor {
 
+	String createAccessToken(Long memberId);
+
+	String createRefreshToken(Long memberId);
+
 	Long extractMemberId(String token);
 
 	boolean validateToken(String token);
