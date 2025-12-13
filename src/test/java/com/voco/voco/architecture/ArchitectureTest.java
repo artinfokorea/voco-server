@@ -1,5 +1,6 @@
 package com.voco.voco.architecture;
 
+import static com.tngtech.archunit.core.domain.JavaClass.Predicates.*;
 import static com.tngtech.archunit.lang.syntax.ArchRuleDefinition.*;
 import static com.tngtech.archunit.library.Architectures.*;
 
@@ -8,6 +9,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 
+import com.tngtech.archunit.base.DescribedPredicate;
+import com.tngtech.archunit.core.domain.JavaClass;
 import com.tngtech.archunit.core.domain.JavaClasses;
 import com.tngtech.archunit.core.importer.ClassFileImporter;
 import com.tngtech.archunit.core.importer.ImportOption;
@@ -80,6 +83,11 @@ class ArchitectureTest {
 				.whereLayer("Application").mayOnlyBeAccessedByLayers("Presentation", "Infrastructure")
 				.whereLayer("Domain").mayOnlyBeAccessedByLayers("Application", "Infrastructure")
 				.whereLayer("Infrastructure").mayNotBeAccessedByAnyLayer()
+
+				.ignoreDependency(
+					resideInAPackage("..presentation.."),
+					resideInAPackage("..domain.model..").and(DescribedPredicate.describe("is enum", JavaClass::isEnum))
+				)
 
 				.check(classes);
 		}

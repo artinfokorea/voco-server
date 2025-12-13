@@ -1,6 +1,7 @@
 package com.voco.voco.app.scenario.presentation.controller.dto.out;
 
 import com.voco.voco.app.scenario.application.usecase.dto.out.ScenarioInfo;
+import com.voco.voco.app.scenario.domain.model.Category;
 import com.voco.voco.app.scenario.domain.model.Level;
 
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -19,6 +20,9 @@ public record ScenarioResponse(
 	@Schema(description = "난이도", example = "BEGINNER")
 	Level level,
 
+	@Schema(description = "카테고리", example = "DAILY")
+	Category category,
+
 	@Schema(description = "시나리오 내용")
 	String content
 ) {
@@ -28,6 +32,7 @@ public record ScenarioResponse(
 			info.title(),
 			info.description(),
 			info.level(),
+			info.category(),
 			info.content()
 		);
 	}

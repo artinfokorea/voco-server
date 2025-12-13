@@ -16,6 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.voco.voco.app.scenario.application.usecase.dto.out.ScenarioInfo;
 import com.voco.voco.app.scenario.domain.interfaces.ScenarioQueryRepository;
+import com.voco.voco.app.scenario.domain.model.Category;
 import com.voco.voco.app.scenario.domain.model.Level;
 import com.voco.voco.app.scenario.domain.model.ScenarioEntity;
 
@@ -36,8 +37,8 @@ class GetScenariosUseCaseTest {
 		@DisplayName("level이 null이면 전체 시나리오를 조회한다")
 		void getScenarios_WithNullLevel_ReturnsAll() {
 			// given
-			ScenarioEntity scenario1 = createScenarioWithId(1L, "카페에서 주문하기", "카페 상황 연습", Level.BEGINNER, "내용1");
-			ScenarioEntity scenario2 = createScenarioWithId(2L, "비즈니스 미팅", "미팅 상황 연습", Level.ADVANCED, "내용2");
+			ScenarioEntity scenario1 = createScenarioWithId(1L, "카페에서 주문하기", "카페 상황 연습", Level.BEGINNER, Category.DAILY, "내용1");
+			ScenarioEntity scenario2 = createScenarioWithId(2L, "비즈니스 미팅", "미팅 상황 연습", Level.ADVANCED, Category.BUSINESS, "내용2");
 
 			given(scenarioQueryRepository.findAll())
 				.willReturn(List.of(scenario1, scenario2));
@@ -61,7 +62,7 @@ class GetScenariosUseCaseTest {
 		@DisplayName("level이 지정되면 해당 레벨의 시나리오만 조회한다")
 		void getScenarios_WithLevel_ReturnsFiltered() {
 			// given
-			ScenarioEntity beginnerScenario = createScenarioWithId(1L, "카페에서 주문하기", "카페 상황 연습", Level.BEGINNER, "내용1");
+			ScenarioEntity beginnerScenario = createScenarioWithId(1L, "카페에서 주문하기", "카페 상황 연습", Level.BEGINNER, Category.DAILY, "내용1");
 
 			given(scenarioQueryRepository.findAllByLevel(Level.BEGINNER))
 				.willReturn(List.of(beginnerScenario));
@@ -108,7 +109,7 @@ class GetScenariosUseCaseTest {
 		@DisplayName("하나의 시나리오만 있어도 조회에 성공한다")
 		void getScenarios_SingleScenario_Success() {
 			// given
-			ScenarioEntity scenario = createScenarioWithId(1L, "카페에서 주문하기", "카페 상황 연습", Level.BEGINNER, "내용");
+			ScenarioEntity scenario = createScenarioWithId(1L, "카페에서 주문하기", "카페 상황 연습", Level.BEGINNER, Category.DAILY, "내용");
 
 			given(scenarioQueryRepository.findAll())
 				.willReturn(List.of(scenario));
@@ -122,8 +123,8 @@ class GetScenariosUseCaseTest {
 		}
 	}
 
-	private ScenarioEntity createScenarioWithId(Long id, String title, String description, Level level, String content) {
-		ScenarioEntity scenario = ScenarioEntity.create(title, description, level, content);
+	private ScenarioEntity createScenarioWithId(Long id, String title, String description, Level level, Category category, String content) {
+		ScenarioEntity scenario = ScenarioEntity.create(title, description, level, category, content);
 		try {
 			java.lang.reflect.Field idField = ScenarioEntity.class.getDeclaredField("id");
 			idField.setAccessible(true);

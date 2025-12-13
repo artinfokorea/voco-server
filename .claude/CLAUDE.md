@@ -36,7 +36,7 @@
 
 ## 의존 관계
 
-- presentation -> application
+- presentation -> application, domain(enum only)
 - application -> domain
 - infrastructure -> application, domain
 

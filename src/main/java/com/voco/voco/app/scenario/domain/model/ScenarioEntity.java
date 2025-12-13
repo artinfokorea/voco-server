@@ -39,24 +39,30 @@ public class ScenarioEntity extends BaseModel {
 	@Column(name = "level", nullable = false)
 	private Level level;
 
+	@Enumerated(EnumType.STRING)
+	@Column(name = "category", nullable = false)
+	private Category category;
+
 	@Column(name = "content", nullable = false, columnDefinition = "TEXT")
 	private String content;
 
-	private ScenarioEntity(String title, String description, Level level, String content) {
+	private ScenarioEntity(String title, String description, Level level, Category category, String content) {
 		this.title = title;
 		this.description = description;
 		this.level = level;
+		this.category = category;
 		this.content = content;
 	}
 
-	public static ScenarioEntity create(String title, String description, Level level, String content) {
-		return new ScenarioEntity(title, description, level, content);
+	public static ScenarioEntity create(String title, String description, Level level, Category category, String content) {
+		return new ScenarioEntity(title, description, level, category, content);
 	}
 
-	public void update(String title, String description, Level level, String content) {
+	public void update(String title, String description, Level level, Category category, String content) {
 		this.title = title;
 		this.description = description;
 		this.level = level;
+		this.category = category;
 		this.content = content;
 	}
 }
