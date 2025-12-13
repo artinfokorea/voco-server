@@ -28,7 +28,11 @@ public enum ApiErrorType {
 
 	// NOTIFICATION
 	DUPLICATED_NOTIFICATION_SCHEDULE(ApiErrorCode.CLIENT_ERROR, "NOTIFICATION-1", "해당 요일에 이미 알림 스케줄이 존재합니다.", LogLevel.WARN),
-	NOTIFICATION_SCHEDULE_NOT_FOUND(ApiErrorCode.NOT_FOUND, "NOTIFICATION-2", "알림 스케줄을 찾을 수 없습니다.", LogLevel.WARN);
+	NOTIFICATION_SCHEDULE_NOT_FOUND(ApiErrorCode.NOT_FOUND, "NOTIFICATION-2", "알림 스케줄을 찾을 수 없습니다.", LogLevel.WARN),
+
+	// CALL
+	CALL_ANALYSIS_NOT_FOUND(ApiErrorCode.NOT_FOUND, "CALL-1", "분석 결과를 찾을 수 없습니다.", LogLevel.WARN),
+	CALL_ANALYSIS_FORBIDDEN(ApiErrorCode.FORBIDDEN, "CALL-2", "해당 분석 결과에 접근할 권한이 없습니다.", LogLevel.WARN);
 
 	private final ApiErrorCode errorCode;
 	private final String errorNo;

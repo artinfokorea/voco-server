@@ -29,18 +29,22 @@ public class CallAnalysisEntity extends BaseModel {
 	private Long id;
 
 	@JdbcTypeCode(SqlTypes.JSON)
-	@Column(name = "content", nullable = false, columnDefinition = "jsonb")
+	@Column(name = "content", nullable = false)
 	private String content;
 
 	@Column(name = "score", nullable = false)
 	private Integer score;
 
-	private CallAnalysisEntity(String content, Integer score) {
+	@Column(name = "summary", nullable = false, columnDefinition = "TEXT")
+	private String summary;
+
+	private CallAnalysisEntity(String content, Integer score, String summary) {
 		this.content = content;
 		this.score = score;
+		this.summary = summary;
 	}
 
-	public static CallAnalysisEntity create(String content, Integer score) {
-		return new CallAnalysisEntity(content, score);
+	public static CallAnalysisEntity create(String content, Integer score, String summary) {
+		return new CallAnalysisEntity(content, score, summary);
 	}
 }

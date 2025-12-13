@@ -31,6 +31,7 @@ class ApiControllerAdvice {
 		switch (e.getErrorType().getErrorCode()) {
 			case DB_ERROR -> status = HttpStatus.INTERNAL_SERVER_ERROR;
 			case UNAUTHORIZED -> status = HttpStatus.UNAUTHORIZED;
+			case FORBIDDEN -> status = HttpStatus.FORBIDDEN;
 			case CLIENT_ERROR -> status = HttpStatus.BAD_REQUEST;
 			case NOT_FOUND -> status = HttpStatus.NOT_FOUND;
 			default -> status = HttpStatus.OK;

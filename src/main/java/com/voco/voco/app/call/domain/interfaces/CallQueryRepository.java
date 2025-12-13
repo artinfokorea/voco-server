@@ -8,4 +8,6 @@ import com.voco.voco.app.call.domain.interfaces.dto.CallWithScenarioDto;
 public interface CallQueryRepository {
 
 	Page<CallWithScenarioDto> findAllByMemberIdWithScenario(Long memberId, Pageable pageable);
+
+	boolean existsByAnalysisIdAndMemberId(Long analysisId, Long memberId);
 }

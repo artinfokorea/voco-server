@@ -54,4 +54,20 @@ public class CallQueryRepositoryImpl implements CallQueryRepository {
 
 		return new PageImpl<>(content, pageable, total != null ? total : 0);
 	}
+
+	@Override
+	public boolean existsByAnalysisIdAndMemberId(Long analysisId, Long memberId) {
+		QCallEntity call = QCallEntity.callEntity;
+
+		Integer result = queryFactory
+			.selectOne()
+			.from(call)
+			.where(
+				call.analysisId.eq(analysisId),
+				call.memberId.eq(memberId)
+			)
+			.fetchFirst();
+
+		return result != null;
+	}
 }
