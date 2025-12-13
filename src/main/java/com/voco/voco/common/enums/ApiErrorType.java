@@ -23,20 +23,8 @@ public enum ApiErrorType {
 		LogLevel.WARN),
 	INVALID_PASSWORD(ApiErrorCode.CLIENT_ERROR, "MEMBER-2", "비밀번호는 최소 8자 이상이며, 영문자, 숫자, 특수문자를 각각 하나 이상 포함해야 합니다.",
 		LogLevel.WARN),
-	INVALID_PASSWORD_MISMATCH(ApiErrorCode.CLIENT_ERROR, "MEMBER-4", "비밀번호가 일치하지 않습니다.", LogLevel.WARN),
-	DUPLICATED_EMAIL(ApiErrorCode.CLIENT_ERROR, "MEMBER-4", "이미 사용 중인 이메일입니다.", LogLevel.WARN),
-
-	// ROOM
-	ROOM_NOT_FOUND(ApiErrorCode.NOT_FOUND, "ROOM-1", "해당 방이 존재하지 않습니다.",
-		LogLevel.WARN),
-
-	// RESERVATION
-	RESERVATION_NOT_FOUND(ApiErrorCode.NOT_FOUND, "RESERVATION-1", "해당 예약이 존재하지 않습니다.",
-		LogLevel.WARN),
-	DUPLICATED_RESERVATION(ApiErrorCode.CLIENT_ERROR, "RESERVATION-2", "이미 해당 시간에 예약이 존재합니다.",
-		LogLevel.WARN),
-	INVALID_RESERVATION_TIME(ApiErrorCode.CLIENT_ERROR, "RESERVATION-3", "이전 시간은 예약할 수 없습니다.",
-		LogLevel.WARN);
+	INVALID_PASSWORD_MISMATCH(ApiErrorCode.CLIENT_ERROR, "MEMBER-3", "비밀번호가 일치하지 않습니다.", LogLevel.WARN),
+	DUPLICATED_EMAIL(ApiErrorCode.CLIENT_ERROR, "MEMBER-4", "이미 사용 중인 이메일입니다.", LogLevel.WARN);
 
 	private final ApiErrorCode errorCode;
 	private final String errorNo;
