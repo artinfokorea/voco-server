@@ -61,6 +61,16 @@ public class JwtAdaptorImpl implements JwtAdaptor {
 	}
 
 	@Override
+	public Long extractMemberIdIgnoreExpiration(String token) {
+		try {
+			Claims claims = parseClaims(token);
+			return claims.get("memberId", Long.class);
+		} catch (ExpiredJwtException e) {
+			return e.getClaims().get("memberId", Long.class);
+		}
+	}
+
+	@Override
 	public boolean validateToken(String token) {
 		try {
 			parseClaims(token);

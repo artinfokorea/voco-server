@@ -10,6 +10,8 @@ public interface JwtAdaptor {
 
 	Long extractMemberId(String token);
 
+	Long extractMemberIdIgnoreExpiration(String token);
+
 	boolean validateToken(String token);
 
 	Authentication getAuthentication(String token);
