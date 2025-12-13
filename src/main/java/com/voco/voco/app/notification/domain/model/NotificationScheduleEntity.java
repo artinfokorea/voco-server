@@ -55,4 +55,9 @@ public class NotificationScheduleEntity extends BaseModel {
 	public static NotificationScheduleEntity create(Long memberId, DayOfWeek dayOfWeek, LocalTime notificationTime) {
 		return new NotificationScheduleEntity(memberId, dayOfWeek, notificationTime);
 	}
+
+	public void update(DayOfWeek dayOfWeek, LocalTime notificationTime) {
+		this.dayOfWeek = dayOfWeek;
+		this.notificationTime = notificationTime;
+	}
 }

@@ -27,7 +27,8 @@ public enum ApiErrorType {
 	DUPLICATED_EMAIL(ApiErrorCode.CLIENT_ERROR, "MEMBER-4", "이미 사용 중인 이메일입니다.", LogLevel.WARN),
 
 	// NOTIFICATION
-	DUPLICATED_NOTIFICATION_SCHEDULE(ApiErrorCode.CLIENT_ERROR, "NOTIFICATION-1", "해당 요일에 이미 알림 스케줄이 존재합니다.", LogLevel.WARN);
+	DUPLICATED_NOTIFICATION_SCHEDULE(ApiErrorCode.CLIENT_ERROR, "NOTIFICATION-1", "해당 요일에 이미 알림 스케줄이 존재합니다.", LogLevel.WARN),
+	NOTIFICATION_SCHEDULE_NOT_FOUND(ApiErrorCode.NOT_FOUND, "NOTIFICATION-2", "알림 스케줄을 찾을 수 없습니다.", LogLevel.WARN);
 
 	private final ApiErrorCode errorCode;
 	private final String errorNo;
