@@ -25,7 +25,7 @@ import lombok.RequiredArgsConstructor;
 public class SignInUseCase {
 
 	private static final long ACCESS_TOKEN_VALIDITY_MINUTES = 30;
-	private static final long REFRESH_TOKEN_VALIDITY_DAYS = 7;
+	private static final long REFRESH_TOKEN_VALIDITY_DAYS = 180;
 
 	private final MemberQueryRepository memberQueryRepository;
 	private final TokenQueryRepository tokenQueryRepository;
