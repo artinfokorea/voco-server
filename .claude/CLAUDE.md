@@ -23,8 +23,11 @@
     - model
         - ...Entity
     - interfaces
-        - ...CommandRepository
+        - dto
+            - in
+                - ...DomainDto
         - ...QueryRepository
+        - ...CommandRepository
 - infrastructure(기술적 세부사항을 구현)
     - adaptor
     - repository
@@ -44,4 +47,5 @@
 - 사용하지 않는 코드는 항상 지워준다.
 - 통합 테트스 생성 시 각 통합테스트별로 의존을 지양한다.
 - 테스트 코드 이외에 운영 코드에 주석은 최소화 한다.
+- 파라미터가 3개 이상 시 dto로 만들어준다.
                     
