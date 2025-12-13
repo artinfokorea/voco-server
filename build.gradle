@@ -58,6 +58,9 @@ dependencies {
 
     // H2
     runtimeOnly 'com.h2database:h2'
+
+    // ArchUnit
+    testImplementation 'com.tngtech.archunit:archunit-junit5:1.2.1'
 }
 
 tasks.named('test') {
