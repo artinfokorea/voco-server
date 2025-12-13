@@ -2,6 +2,7 @@ package com.voco.voco.app.notification.infrastructure.repository;
 
 import java.time.DayOfWeek;
 import java.time.LocalTime;
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -13,4 +14,6 @@ public interface NotificationScheduleJpaRepository extends JpaRepository<Notific
 	boolean existsByMemberIdAndDayOfWeekAndNotificationTime(Long memberId, DayOfWeek dayOfWeek, LocalTime notificationTime);
 
 	Optional<NotificationScheduleEntity> findByIdAndMemberId(Long id, Long memberId);
+
+	List<NotificationScheduleEntity> findAllByMemberId(Long memberId);
 }

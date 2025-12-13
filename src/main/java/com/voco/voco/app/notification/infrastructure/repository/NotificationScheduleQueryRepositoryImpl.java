@@ -1,5 +1,6 @@
 package com.voco.voco.app.notification.infrastructure.repository;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.stereotype.Repository;
@@ -25,5 +26,10 @@ public class NotificationScheduleQueryRepositoryImpl implements NotificationSche
 	@Override
 	public Optional<NotificationScheduleEntity> findByIdAndMemberId(Long id, Long memberId) {
 		return notificationScheduleJpaRepository.findByIdAndMemberId(id, memberId);
+	}
+
+	@Override
+	public List<NotificationScheduleEntity> findAllByMemberId(Long memberId) {
+		return notificationScheduleJpaRepository.findAllByMemberId(memberId);
 	}
 }

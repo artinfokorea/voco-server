@@ -1,6 +1,9 @@
 package com.voco.voco.app.notification.presentation.controller;
 
+import java.util.List;
+
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -10,10 +13,12 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.voco.voco.app.notification.application.usecase.CreateNotificationScheduleUseCase;
 import com.voco.voco.app.notification.application.usecase.DeleteNotificationScheduleUseCase;
+import com.voco.voco.app.notification.application.usecase.GetNotificationSchedulesUseCase;
 import com.voco.voco.app.notification.application.usecase.UpdateNotificationScheduleUseCase;
 import com.voco.voco.app.notification.application.usecase.dto.in.DeleteNotificationScheduleUseCaseDto;
 import com.voco.voco.app.notification.presentation.controller.dto.in.CreateNotificationScheduleRequest;
 import com.voco.voco.app.notification.presentation.controller.dto.in.UpdateNotificationScheduleRequest;
+import com.voco.voco.app.notification.presentation.controller.dto.out.NotificationScheduleResponse;
 import com.voco.voco.common.annotation.MemberId;
 import com.voco.voco.common.dto.response.ApiResponse;
 
@@ -33,6 +38,19 @@ public class NotificationScheduleController {
 	private final CreateNotificationScheduleUseCase createNotificationScheduleUseCase;
 	private final UpdateNotificationScheduleUseCase updateNotificationScheduleUseCase;
 	private final DeleteNotificationScheduleUseCase deleteNotificationScheduleUseCase;
+	private final GetNotificationSchedulesUseCase getNotificationSchedulesUseCase;
+
+	@Operation(summary = "알림 스케줄 전체 조회", description = "로그인한 사용자의 모든 알림 스케줄을 조회합니다.")
+	@GetMapping
+	public ApiResponse<List<NotificationScheduleResponse>> getNotificationSchedules(
+		@MemberId Long memberId
+	) {
+		List<NotificationScheduleResponse> responses = getNotificationSchedulesUseCase.execute(memberId)
+			.stream()
+			.map(NotificationScheduleResponse::from)
+			.toList();
+		return ApiResponse.success(responses);
+	}
 
 	@Operation(summary = "알림 스케줄 생성", description = "요일별 알림 스케줄을 생성합니다.")
 	@PostMapping
