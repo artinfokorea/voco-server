@@ -6,7 +6,9 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.MappedSuperclass;
 
+@MappedSuperclass
 public class BaseModel {
 	@CreatedDate
 	@Column(name = "created_at", updatable = false, nullable = false)

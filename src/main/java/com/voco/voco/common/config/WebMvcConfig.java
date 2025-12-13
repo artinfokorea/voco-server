@@ -7,7 +7,7 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-import com.voco.voco.app.auth.infrastructure.adaptor.MemberIdArgumentResolver;
+import com.voco.voco.common.annotation.MemberIdArgumentResolver;
 
 import lombok.RequiredArgsConstructor;
 

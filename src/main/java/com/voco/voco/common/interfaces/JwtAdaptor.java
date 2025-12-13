@@ -1,8 +1,8 @@
-package com.voco.voco.app.auth.application.interfaces;
+package com.voco.voco.common.interfaces;
 
 import org.springframework.security.core.Authentication;
 
-public interface JwtProvider {
+public interface JwtAdaptor {
 
 	Long extractMemberId(String token);
 

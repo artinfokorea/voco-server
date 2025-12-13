@@ -8,8 +8,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.voco.voco.app.auth.application.interfaces.JwtProvider;
 import com.voco.voco.common.exception.CoreException;
+import com.voco.voco.common.interfaces.JwtAdaptor;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -18,10 +18,10 @@ import jakarta.servlet.http.HttpServletResponse;
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
-	private final JwtProvider jwtProvider;
+	private final JwtAdaptor jwtAdaptor;
 
-	public JwtAuthenticationFilter(JwtProvider jwtProvider) {
-		this.jwtProvider = jwtProvider;
+	public JwtAuthenticationFilter(JwtAdaptor jwtAdaptor) {
+		this.jwtAdaptor = jwtAdaptor;
 	}
 
 	@Override
@@ -30,8 +30,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 		String token = resolveToken(request);
 
 		try {
-			if (token != null && jwtProvider.validateToken(token)) {
-				Authentication authentication = jwtProvider.getAuthentication(token);
+			if (token != null && jwtAdaptor.validateToken(token)) {
+				Authentication authentication = jwtAdaptor.getAuthentication(token);
 				SecurityContextHolder.getContext().setAuthentication(authentication);
 			}
 		} catch (CoreException e) {

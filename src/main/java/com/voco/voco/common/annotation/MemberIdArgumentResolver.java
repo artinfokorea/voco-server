@@ -1,4 +1,4 @@
-package com.voco.voco.app.auth.infrastructure.adaptor;
+package com.voco.voco.common.annotation;
 
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
@@ -7,20 +7,19 @@ import org.springframework.web.context.request.NativeWebRequest;
 import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.method.support.ModelAndViewContainer;
 
-import com.voco.voco.app.auth.application.interfaces.JwtProvider;
-import com.voco.voco.common.annotation.MemberId;
 import com.voco.voco.common.enums.ApiErrorType;
 import com.voco.voco.common.exception.CoreException;
+import com.voco.voco.common.interfaces.JwtAdaptor;
 
 import jakarta.servlet.http.HttpServletRequest;
 
 @Component
 public class MemberIdArgumentResolver implements HandlerMethodArgumentResolver {
 
-	private final JwtProvider jwtProvider;
+	private final JwtAdaptor jwtAdaptor;
 
-	public MemberIdArgumentResolver(JwtProvider jwtProvider) {
-		this.jwtProvider = jwtProvider;
+	public MemberIdArgumentResolver(JwtAdaptor jwtAdaptor) {
+		this.jwtAdaptor = jwtAdaptor;
 	}
 
 	@Override
@@ -42,6 +41,6 @@ public class MemberIdArgumentResolver implements HandlerMethodArgumentResolver {
 		}
 
 		String token = authorizationHeader.substring(7);
-		return jwtProvider.extractMemberId(token);
+		return jwtAdaptor.extractMemberId(token);
 	}
 }

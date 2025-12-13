@@ -37,7 +37,7 @@ public class SwaggerConfig {
 	@Bean
 	public GroupedOpenApi api() {
 		String[] paths = {"/api/v1/**"};
-		String[] packagesToScan = {"com.voco.voco.app.*"};
+		String[] packagesToScan = {"com.voco.voco"};
 		return GroupedOpenApi.builder().group("springdoc-openapi")
 			.pathsToMatch(paths)
 			.packagesToScan(packagesToScan).build();

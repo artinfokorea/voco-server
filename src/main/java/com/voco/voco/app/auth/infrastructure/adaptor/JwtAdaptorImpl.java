@@ -9,9 +9,9 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Component;
 
-import com.voco.voco.app.auth.application.interfaces.JwtProvider;
 import com.voco.voco.common.enums.ApiErrorType;
 import com.voco.voco.common.exception.CoreException;
+import com.voco.voco.common.interfaces.JwtAdaptor;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
@@ -20,11 +20,11 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 
 @Component
-public class JwtProviderImpl implements JwtProvider {
+public class JwtAdaptorImpl implements JwtAdaptor {
 
 	private final SecretKey secretKey;
 
-	public JwtProviderImpl(@Value("${jwt.secret-key}") String secretKey) {
+	public JwtAdaptorImpl(@Value("${jwt.secret-key}") String secretKey) {
 		this.secretKey = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
 	}
 
