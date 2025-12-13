@@ -72,7 +72,8 @@ public class MemberEntity extends BaseModel {
 		return new MemberEntity(koreanName, englishName, email, password, level, categories);
 	}
 
-	public void updatePreference(Level level, Set<Category> categories) {
+	public void update(String englishName, Level level, Set<Category> categories) {
+		this.englishName = englishName;
 		this.level = level;
 		this.categories = categories;
 	}

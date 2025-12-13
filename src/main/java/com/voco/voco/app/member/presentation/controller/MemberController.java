@@ -1,12 +1,16 @@
 package com.voco.voco.app.member.presentation.controller;
 
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.voco.voco.app.member.application.usecase.SignUpUseCase;
+import com.voco.voco.app.member.application.usecase.UpdateMemberUseCase;
 import com.voco.voco.app.member.presentation.controller.dto.in.SignUpRequest;
+import com.voco.voco.app.member.presentation.controller.dto.in.UpdateMemberRequest;
+import com.voco.voco.common.annotation.MemberId;
 import com.voco.voco.common.dto.response.ApiResponse;
 import com.voco.voco.common.dto.response.LongIdResponse;
 
@@ -22,11 +26,22 @@ import lombok.RequiredArgsConstructor;
 public class MemberController {
 
 	private final SignUpUseCase signUpUseCase;
+	private final UpdateMemberUseCase updateMemberUseCase;
 
 	@Operation(summary = "회원가입", description = "새로운 회원을 등록합니다.")
 	@PostMapping("/sign-up")
 	public ApiResponse<LongIdResponse> signUp(@Valid @RequestBody SignUpRequest request) {
 		Long memberId = signUpUseCase.execute(request.toUseCaseDto());
 		return ApiResponse.success(new LongIdResponse(memberId));
+	}
+
+	@Operation(summary = "회원 정보 수정", description = "회원 정보를 수정합니다.")
+	@PutMapping
+	public ApiResponse<Void> updateMember(
+		@MemberId Long memberId,
+		@Valid @RequestBody UpdateMemberRequest request
+	) {
+		updateMemberUseCase.execute(request.toUseCaseDto(memberId));
+		return ApiResponse.success(null);
 	}
 }

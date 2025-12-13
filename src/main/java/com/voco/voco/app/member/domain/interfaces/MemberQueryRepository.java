@@ -9,4 +9,6 @@ public interface MemberQueryRepository {
 	boolean existsByEmail(String email);
 
 	Optional<MemberEntity> findByEmail(String email);
+
+	Optional<MemberEntity> findById(Long id);
 }
