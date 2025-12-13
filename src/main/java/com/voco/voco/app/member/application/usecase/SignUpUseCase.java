@@ -32,7 +32,9 @@ public class SignUpUseCase {
 			dto.koreanName(),
 			dto.englishName(),
 			dto.email(),
-			encodedPassword
+			encodedPassword,
+			dto.level(),
+			dto.categories()
 		);
 
 		return memberCommandRepository.save(member);

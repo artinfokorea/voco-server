@@ -1,10 +1,16 @@
 package com.voco.voco.app.member.presentation.controller.dto.in;
 
+import java.util.Set;
+
 import com.voco.voco.app.member.application.usecase.dto.in.SignUpUseCaseDto;
+import com.voco.voco.app.member.domain.model.Category;
+import com.voco.voco.app.member.domain.model.Level;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotNull;
 
 @Schema(description = "회원가입 요청")
 public record SignUpRequest(
@@ -23,9 +29,17 @@ public record SignUpRequest(
 
 	@Schema(description = "비밀번호", example = "Password1!")
 	@NotBlank(message = "비밀번호는 필수입니다.")
-	String password
+	String password,
+
+	@Schema(description = "레벨", example = "BEGINNER")
+	@NotNull(message = "레벨은 필수입니다.")
+	Level level,
+
+	@Schema(description = "카테고리 목록", example = "[\"DAILY\", \"BUSINESS\"]")
+	@NotEmpty(message = "카테고리는 최소 1개 이상 선택해야 합니다.")
+	Set<Category> categories
 ) {
 	public SignUpUseCaseDto toUseCaseDto() {
-		return new SignUpUseCaseDto(koreanName, englishName, email, password);
+		return new SignUpUseCaseDto(koreanName, englishName, email, password, level, categories);
 	}
 }

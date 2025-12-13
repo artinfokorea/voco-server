@@ -14,9 +14,13 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.Set;
+
 import com.voco.voco.app.member.application.usecase.dto.in.SignUpUseCaseDto;
 import com.voco.voco.app.member.domain.interfaces.MemberCommandRepository;
 import com.voco.voco.app.member.domain.interfaces.MemberQueryRepository;
+import com.voco.voco.app.member.domain.model.Category;
+import com.voco.voco.app.member.domain.model.Level;
 import com.voco.voco.app.member.domain.model.MemberEntity;
 import com.voco.voco.common.enums.ApiErrorType;
 import com.voco.voco.common.exception.CoreException;
@@ -52,7 +56,9 @@ class SignUpUseCaseTest {
 				"홍길동",
 				"Hong Gildong",
 				"test@example.com",
-				VALID_PASSWORD
+				VALID_PASSWORD,
+				Level.BEGINNER,
+				Set.of(Category.DAILY, Category.BUSINESS)
 			);
 			Long expectedMemberId = 1L;
 
@@ -78,7 +84,9 @@ class SignUpUseCaseTest {
 				"홍길동",
 				"Hong Gildong",
 				"duplicate@example.com",
-				VALID_PASSWORD
+				VALID_PASSWORD,
+				Level.BEGINNER,
+				Set.of(Category.DAILY)
 			);
 
 			given(memberQueryRepository.existsByEmail(dto.email())).willReturn(true);
@@ -116,7 +124,9 @@ class SignUpUseCaseTest {
 				"홍길동",
 				"Hong Gildong",
 				"test@example.com",
-				invalidPassword
+				invalidPassword,
+				Level.BEGINNER,
+				Set.of(Category.DAILY)
 			);
 
 			given(memberQueryRepository.existsByEmail(dto.email())).willReturn(false);
@@ -147,7 +157,9 @@ class SignUpUseCaseTest {
 				"홍길동",
 				"Hong Gildong",
 				"test@example.com",
-				validPassword
+				validPassword,
+				Level.BEGINNER,
+				Set.of(Category.DAILY)
 			);
 			Long expectedMemberId = 1L;
 

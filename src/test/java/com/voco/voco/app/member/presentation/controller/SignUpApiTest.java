@@ -4,6 +4,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
+import java.util.Set;
 import java.util.UUID;
 
 import org.junit.jupiter.api.DisplayName;
@@ -17,6 +18,8 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.voco.voco.app.member.domain.model.Category;
+import com.voco.voco.app.member.domain.model.Level;
 import com.voco.voco.app.member.presentation.controller.dto.in.SignUpRequest;
 
 @SpringBootTest
@@ -45,7 +48,9 @@ class SignUpApiTest {
 			"홍길동",
 			"Hong Gildong",
 			uniqueEmail(),
-			"Password1!"
+			"Password1!",
+			Level.BEGINNER,
+			Set.of(Category.DAILY, Category.BUSINESS)
 		);
 
 		// when
@@ -70,7 +75,9 @@ class SignUpApiTest {
 			"홍길동",
 			"Hong Gildong",
 			email,
-			"Password1!"
+			"Password1!",
+			Level.BEGINNER,
+			Set.of(Category.DAILY)
 		);
 
 		// 첫 번째 회원가입 (성공)
@@ -83,7 +90,9 @@ class SignUpApiTest {
 			"김철수",
 			"Kim Cheolsu",
 			email,
-			"Password1!"
+			"Password1!",
+			Level.INTERMEDIATE,
+			Set.of(Category.BUSINESS)
 		);
 		ResultActions result = mockMvc.perform(post(URL)
 			.contentType(MediaType.APPLICATION_JSON)
@@ -105,7 +114,9 @@ class SignUpApiTest {
 			"홍길동",
 			"Hong Gildong",
 			uniqueEmail(),
-			"short"
+			"short",
+			Level.BEGINNER,
+			Set.of(Category.DAILY)
 		);
 
 		// when
@@ -129,7 +140,9 @@ class SignUpApiTest {
 			{
 				"koreanName": "홍길동",
 				"englishName": "Hong Gildong",
-				"password": "Password1!"
+				"password": "Password1!",
+				"level": "BEGINNER",
+				"categories": ["DAILY"]
 			}
 			""";
 
@@ -152,7 +165,9 @@ class SignUpApiTest {
 			"홍길동",
 			"Hong Gildong",
 			"invalid-email",
-			"Password1!"
+			"Password1!",
+			Level.BEGINNER,
+			Set.of(Category.DAILY)
 		);
 
 		// when

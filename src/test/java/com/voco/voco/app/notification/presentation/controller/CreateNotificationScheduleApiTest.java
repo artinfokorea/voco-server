@@ -6,6 +6,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import java.time.DayOfWeek;
 import java.time.LocalTime;
+import java.util.Set;
 import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -22,6 +23,8 @@ import org.springframework.transaction.annotation.Transactional;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
 import com.voco.voco.app.auth.presentation.controller.dto.in.SignInRequest;
+import com.voco.voco.app.member.domain.model.Category;
+import com.voco.voco.app.member.domain.model.Level;
 import com.voco.voco.app.member.presentation.controller.dto.in.SignUpRequest;
 import com.voco.voco.app.notification.presentation.controller.dto.in.CreateNotificationScheduleRequest;
 
@@ -56,7 +59,9 @@ class CreateNotificationScheduleApiTest {
 			"홍길동",
 			"Hong Gildong",
 			email,
-			VALID_PASSWORD
+			VALID_PASSWORD,
+			Level.BEGINNER,
+			Set.of(Category.DAILY)
 		);
 		mockMvc.perform(post(SIGN_UP_URL)
 			.contentType(MediaType.APPLICATION_JSON)

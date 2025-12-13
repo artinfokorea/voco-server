@@ -5,12 +5,20 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.voco.voco.common.model.BaseModel;
 
+import java.util.HashSet;
+import java.util.Set;
+
+import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -39,14 +47,33 @@ public class MemberEntity extends BaseModel {
 	@Column(name = "password", nullable = false)
 	private String password;
 
-	private MemberEntity(String koreanName, String englishName, String email, String password) {
+	@Enumerated(EnumType.STRING)
+	@Column(name = "level", nullable = false)
+	private Level level;
+
+	@ElementCollection
+	@Enumerated(EnumType.STRING)
+	@CollectionTable(name = "voco_member_category", joinColumns = @JoinColumn(name = "member_id"))
+	@Column(name = "category")
+	private Set<Category> categories = new HashSet<>();
+
+	private MemberEntity(String koreanName, String englishName, String email, String password, Level level,
+		Set<Category> categories) {
 		this.koreanName = koreanName;
 		this.englishName = englishName;
 		this.email = email;
 		this.password = password;
+		this.level = level;
+		this.categories = categories;
 	}
 
-	public static MemberEntity create(String koreanName, String englishName, String email, String password) {
-		return new MemberEntity(koreanName, englishName, email, password);
+	public static MemberEntity create(String koreanName, String englishName, String email, String password,
+		Level level, Set<Category> categories) {
+		return new MemberEntity(koreanName, englishName, email, password, level, categories);
+	}
+
+	public void updatePreference(Level level, Set<Category> categories) {
+		this.level = level;
+		this.categories = categories;
 	}
 }
