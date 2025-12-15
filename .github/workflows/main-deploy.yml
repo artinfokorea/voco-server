@@ -88,10 +88,11 @@ jobs:
 
       - name: Docker run
         run: |
-          docker rm -f ${{ env.CONTAINER_NAME}}
+          docker rm -f ${{ env.CONTAINER_NAME }} || true
           docker run -d -p 8080:8080 \
             --name ${{ env.CONTAINER_NAME }} \
             --cpus=1 \
             --restart always \
-
+            ${{ env.DOCKER_IMAGE }}:${{ env.VERSION }}
+          
           docker image prune -af
