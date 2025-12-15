@@ -7,9 +7,11 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.voco.voco.app.auth.application.usecase.RefreshTokenUseCase;
 import com.voco.voco.app.auth.application.usecase.SignInUseCase;
+import com.voco.voco.app.auth.application.usecase.SocialSignInUseCase;
 import com.voco.voco.app.auth.application.usecase.dto.out.TokenInfo;
 import com.voco.voco.app.auth.presentation.controller.dto.in.RefreshTokenRequest;
 import com.voco.voco.app.auth.presentation.controller.dto.in.SignInRequest;
+import com.voco.voco.app.auth.presentation.controller.dto.in.SocialSignInRequest;
 import com.voco.voco.app.auth.presentation.controller.dto.out.TokenResponse;
 import com.voco.voco.common.dto.response.ApiResponse;
 
@@ -25,12 +27,20 @@ import lombok.RequiredArgsConstructor;
 public class AuthController {
 
 	private final SignInUseCase signInUseCase;
+	private final SocialSignInUseCase socialSignInUseCase;
 	private final RefreshTokenUseCase refreshTokenUseCase;
 
-	@Operation(summary = "로그인", description = "이메일과 비밀번호로 로그인합니다.")
+	@Operation(summary = "이메일 로그인", description = "이메일과 비밀번호로 로그인합니다.")
 	@PostMapping("/sign-in")
 	public ApiResponse<TokenResponse> signIn(@Valid @RequestBody SignInRequest request) {
 		TokenInfo tokenInfo = signInUseCase.execute(request.toUseCaseDto());
+		return ApiResponse.success(TokenResponse.from(tokenInfo));
+	}
+
+	@Operation(summary = "소셜 로그인", description = "소셜 계정으로 로그인합니다.")
+	@PostMapping("/sign-in/social")
+	public ApiResponse<TokenResponse> socialSignIn(@Valid @RequestBody SocialSignInRequest request) {
+		TokenInfo tokenInfo = socialSignInUseCase.execute(request.toUseCaseDto());
 		return ApiResponse.success(TokenResponse.from(tokenInfo));
 	}
 

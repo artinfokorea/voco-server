@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>소셜 로그인 테스트</title>
+    <style>
+        * { box-sizing: border-box; }
+        body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; max-width: 900px; margin: 0 auto; padding: 20px; background: #f5f5f5; }
+        h1 { text-align: center; color: #333; }
+        .section { background: white; border-radius: 8px; padding: 20px; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        h2 { margin-top: 0; color: #555; border-bottom: 2px solid #eee; padding-bottom: 10px; }
+        .form-group { margin-bottom: 15px; }
+        label { display: block; margin-bottom: 5px; font-weight: 600; color: #444; }
+        input, select, textarea { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; font-size: 14px; }
+        textarea { height: 80px; font-family: monospace; font-size: 12px; }
+        button { padding: 12px 24px; border: none; border-radius: 4px; cursor: pointer; font-size: 14px; font-weight: 600; margin-right: 10px; margin-bottom: 10px; transition: opacity 0.2s; }
+        button:hover { opacity: 0.9; }
+        button:disabled { opacity: 0.5; cursor: not-allowed; }
+        .btn-kakao { background: #FEE500; color: #000; }
+        .btn-google { background: #4285F4; color: white; }
+        .btn-apple { background: #000; color: white; }
+        .btn-primary { background: #007bff; color: white; }
+        .btn-success { background: #28a745; color: white; }
+        .btn-secondary { background: #6c757d; color: white; }
+        .response { background: #f8f9fa; border: 1px solid #e9ecef; border-radius: 4px; padding: 15px; margin-top: 15px; white-space: pre-wrap; font-family: monospace; font-size: 12px; max-height: 200px; overflow-y: auto; word-break: break-all; }
+        .response.error { background: #f8d7da; border-color: #f5c6cb; color: #721c24; }
+        .response.success { background: #d4edda; border-color: #c3e6cb; color: #155724; }
+        .info { background: #e7f3ff; border: 1px solid #b6d4fe; border-radius: 4px; padding: 10px; margin-bottom: 15px; font-size: 13px; color: #084298; }
+        .warning { background: #fff3cd; border: 1px solid #ffecb5; border-radius: 4px; padding: 10px; margin-bottom: 15px; font-size: 13px; color: #664d03; }
+        .social-buttons { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 15px; }
+        .social-buttons button { flex: 1; min-width: 150px; }
+        .token-display { background: #e9ecef; padding: 10px; border-radius: 4px; margin-top: 10px; }
+        .token-display label { font-size: 12px; color: #666; margin-bottom: 3px; }
+        .token-display .token { font-family: monospace; font-size: 11px; word-break: break-all; background: white; padding: 8px; border-radius: 4px; max-height: 60px; overflow-y: auto; }
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        @media (max-width: 600px) { .grid-2 { grid-template-columns: 1fr; } }
+        .status { display: inline-block; padding: 3px 8px; border-radius: 3px; font-size: 12px; margin-left: 10px; }
+        .status.connected { background: #d4edda; color: #155724; }
+        .status.disconnected { background: #f8d7da; color: #721c24; }
+    </style>
+</head>
+<body>
+    <h1>VOCO 소셜 로그인 테스트</h1>
+
+    <!-- 설정 섹션 -->
+    <div class="section">
+        <h2>설정</h2>
+        <div class="warning">
+            각 소셜 플랫폼의 Client ID를 입력해주세요.
+            <a href="https://developers.kakao.com" target="_blank">Kakao</a> |
+            <a href="https://console.cloud.google.com" target="_blank">Google</a> |
+            <a href="https://developer.apple.com" target="_blank">Apple</a>
+        </div>
+        <div class="grid-2">
+            <div class="form-group">
+                <label>API Base URL</label>
+                <input type="text" id="baseUrl" value="http://localhost:8080">
+            </div>
+            <div class="form-group">
+                <label>Kakao JavaScript Key</label>
+                <input type="text" id="kakaoKey" placeholder="카카오 JavaScript 키 입력">
+            </div>
+            <div class="form-group">
+                <label>Google Client ID</label>
+                <input type="text" id="googleClientId" placeholder="Google Client ID 입력">
+            </div>
+            <div class="form-group">
+                <label>Apple Client ID (Service ID)</label>
+                <input type="text" id="appleClientId" placeholder="Apple Service ID 입력">
+            </div>
+        </div>
+        <button class="btn-secondary" onclick="initializeSDKs()">SDK 초기화</button>
+        <span id="sdkStatus" class="status disconnected">미초기화</span>
+    </div>
+
+    <!-- 소셜 로그인 버튼 -->
+    <div class="section">
+        <h2>1. 소셜 로그인으로 토큰 받기</h2>
+        <div class="info">
+            아래 버튼을 클릭하면 각 플랫폼 로그인 창이 열리고, 로그인 후 토큰을 받아옵니다.
+        </div>
+        <div class="social-buttons">
+            <button class="btn-kakao" onclick="loginWithKakao()" id="kakaoLoginBtn" disabled>
+                카카오 로그인
+            </button>
+            <button class="btn-google" onclick="loginWithGoogle()" id="googleLoginBtn" disabled>
+                Google 로그인
+            </button>
+            <button class="btn-apple" onclick="loginWithApple()" id="appleLoginBtn" disabled>
+                Apple 로그인
+            </button>
+        </div>
+
+        <div id="tokenResult" style="display:none;">
+            <div class="token-display">
+                <label>Provider</label>
+                <div class="token" id="currentProvider">-</div>
+            </div>
+            <div class="token-display">
+                <label>Token (idToken / accessToken)</label>
+                <div class="token" id="currentToken">-</div>
+            </div>
+            <div class="token-display">
+                <label>Email (소셜에서 제공하는 경우)</label>
+                <div class="token" id="currentEmail">-</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 회원가입 섹션 -->
+    <div class="section">
+        <h2>2. 소셜 회원가입</h2>
+        <div class="info">
+            위에서 받은 토큰으로 회원가입합니다. 토큰은 자동으로 입력됩니다.
+        </div>
+        <div class="grid-2">
+            <div class="form-group">
+                <label>한글 이름</label>
+                <input type="text" id="signupKoreanName" value="홍길동">
+            </div>
+            <div class="form-group">
+                <label>영문 이름</label>
+                <input type="text" id="signupEnglishName" value="Gildong Hong">
+            </div>
+            <div class="form-group">
+                <label>레벨</label>
+                <select id="signupLevel">
+                    <option value="BEGINNER">BEGINNER (초급)</option>
+                    <option value="INTERMEDIATE">INTERMEDIATE (중급)</option>
+                    <option value="ADVANCED">ADVANCED (고급)</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>카테고리 (Ctrl+클릭 다중선택)</label>
+                <select id="signupCategories" multiple style="height: 80px;">
+                    <option value="DAILY" selected>DAILY (일상)</option>
+                    <option value="BUSINESS">BUSINESS (비즈니스)</option>
+                    <option value="TRAVEL">TRAVEL (여행)</option>
+                    <option value="SHOPPING">SHOPPING (쇼핑)</option>
+                </select>
+            </div>
+        </div>
+        <button class="btn-success" onclick="socialSignUp()" id="signupBtn" disabled>소셜 회원가입</button>
+        <div id="signupResponse" class="response" style="display:none;"></div>
+    </div>
+
+    <!-- 로그인 섹션 -->
+    <div class="section">
+        <h2>3. 소셜 로그인 (기존 회원)</h2>
+        <div class="info">
+            이미 가입된 계정으로 로그인합니다. 위에서 받은 토큰을 사용합니다.
+        </div>
+        <button class="btn-primary" onclick="socialSignIn()" id="signinBtn" disabled>소셜 로그인</button>
+        <div id="signinResponse" class="response" style="display:none;"></div>
+    </div>
+
+    <!-- JWT 토큰 결과 -->
+    <div class="section" id="jwtSection" style="display:none;">
+        <h2>4. 발급된 JWT 토큰</h2>
+        <div class="token-display">
+            <label>Access Token</label>
+            <textarea id="accessToken" readonly></textarea>
+        </div>
+        <div class="token-display">
+            <label>Refresh Token</label>
+            <textarea id="refreshToken" readonly></textarea>
+        </div>
+    </div>
+
+    <!-- Kakao SDK (v1 for popup login support) -->
+    <script src="https://developers.kakao.com/sdk/js/kakao.min.js"></script>
+
+    <!-- Google Identity Services -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+
+    <!-- Apple Sign In -->
+    <script src="https://appleid.cdn-apple.com/appleauth/static/jsapi/appleid/1/en_US/appleid.auth.js"></script>
+
+    <script>
+        let currentProvider = null;
+        let currentToken = null;
+        let googleClient = null;
+
+        function getBaseUrl() {
+            return document.getElementById('baseUrl').value;
+        }
+
+        function showResponse(elementId, data, isError = false) {
+            const el = document.getElementById(elementId);
+            el.style.display = 'block';
+            el.className = 'response ' + (isError ? 'error' : 'success');
+            el.textContent = JSON.stringify(data, null, 2);
+        }
+
+        function getSelectedValues(selectId) {
+            const select = document.getElementById(selectId);
+            return Array.from(select.selectedOptions).map(opt => opt.value);
+        }
+
+        function setCurrentToken(provider, token, email = null) {
+            currentProvider = provider;
+            currentToken = token;
+
+            document.getElementById('tokenResult').style.display = 'block';
+            document.getElementById('currentProvider').textContent = provider;
+            document.getElementById('currentToken').textContent = token;
+            document.getElementById('currentEmail').textContent = email || '(제공되지 않음)';
+
+            document.getElementById('signupBtn').disabled = false;
+            document.getElementById('signinBtn').disabled = false;
+        }
+
+        function initializeSDKs() {
+            const kakaoKey = document.getElementById('kakaoKey').value;
+            const googleClientId = document.getElementById('googleClientId').value;
+            const appleClientId = document.getElementById('appleClientId').value;
+
+            let initialized = [];
+
+            // Kakao SDK 초기화
+            if (kakaoKey) {
+                try {
+                    if (!Kakao.isInitialized()) {
+                        Kakao.init(kakaoKey);
+                    }
+                    document.getElementById('kakaoLoginBtn').disabled = false;
+                    initialized.push('Kakao');
+                    console.log('Kakao SDK initialized:', Kakao.isInitialized());
+                } catch (e) {
+                    console.error('Kakao init error:', e);
+                }
+            }
+
+            // Google SDK 초기화
+            if (googleClientId) {
+                try {
+                    googleClient = google.accounts.oauth2.initTokenClient({
+                        client_id: googleClientId,
+                        scope: 'email profile openid',
+                        callback: handleGoogleResponse,
+                    });
+                    document.getElementById('googleLoginBtn').disabled = false;
+                    initialized.push('Google');
+                } catch (e) {
+                    console.error('Google init error:', e);
+                }
+            }
+
+            // Apple SDK 초기화
+            if (appleClientId) {
+                try {
+                    AppleID.auth.init({
+                        clientId: appleClientId,
+                        scope: 'email name',
+                        redirectURI: window.location.href.split('?')[0],
+                        usePopup: true
+                    });
+                    document.getElementById('appleLoginBtn').disabled = false;
+                    initialized.push('Apple');
+                } catch (e) {
+                    console.error('Apple init error:', e);
+                }
+            }
+
+            const statusEl = document.getElementById('sdkStatus');
+            if (initialized.length > 0) {
+                statusEl.textContent = initialized.join(', ') + ' 초기화됨';
+                statusEl.className = 'status connected';
+            } else {
+                statusEl.textContent = '초기화 실패';
+                statusEl.className = 'status disconnected';
+            }
+        }
+
+        // Kakao 로그인
+        function loginWithKakao() {
+            Kakao.Auth.login({
+                success: function(authObj) {
+                    console.log('Kakao auth success:', authObj);
+                    // 사용자 정보 가져오기
+                    Kakao.API.request({
+                        url: '/v2/user/me',
+                        success: function(res) {
+                            const email = res.kakao_account?.email || null;
+                            setCurrentToken('KAKAO', authObj.access_token, email);
+                        },
+                        fail: function(error) {
+                            setCurrentToken('KAKAO', authObj.access_token);
+                        }
+                    });
+                },
+                fail: function(err) {
+                    console.error('Kakao login failed:', err);
+                    alert('카카오 로그인 실패: ' + JSON.stringify(err));
+                }
+            });
+        }
+
+        // Google 로그인
+        function loginWithGoogle() {
+            if (googleClient) {
+                googleClient.requestAccessToken();
+            }
+        }
+
+        function handleGoogleResponse(response) {
+            if (response.access_token) {
+                // ID Token을 얻기 위해 추가 요청
+                fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
+                    headers: { 'Authorization': 'Bearer ' + response.access_token }
+                })
+                .then(res => res.json())
+                .then(userInfo => {
+                    // Google의 경우 access_token 대신 id_token이 필요한데,
+                    // OAuth2 implicit flow에서는 id_token을 직접 받기 어려움
+                    // 여기서는 access_token을 사용하고, 서버에서 userinfo 엔드포인트로 검증
+                    setCurrentToken('GOOGLE', response.access_token, userInfo.email);
+                })
+                .catch(err => {
+                    setCurrentToken('GOOGLE', response.access_token);
+                });
+            }
+        }
+
+        // Apple 로그인
+        async function loginWithApple() {
+            try {
+                const data = await AppleID.auth.signIn();
+                console.log('Apple auth success:', data);
+
+                // Apple은 authorization.id_token 제공
+                const idToken = data.authorization?.id_token;
+                const email = data.user?.email || null;
+
+                if (idToken) {
+                    setCurrentToken('APPLE', idToken, email);
+                } else {
+                    alert('Apple 로그인 실패: ID Token을 받지 못했습니다.');
+                }
+            } catch (error) {
+                console.error('Apple login error:', error);
+                alert('Apple 로그인 실패: ' + JSON.stringify(error));
+            }
+        }
+
+        // 소셜 회원가입
+        async function socialSignUp() {
+            if (!currentProvider || !currentToken) {
+                alert('먼저 소셜 로그인을 해주세요.');
+                return;
+            }
+
+            const data = {
+                provider: currentProvider,
+                idToken: currentToken,
+                koreanName: document.getElementById('signupKoreanName').value,
+                englishName: document.getElementById('signupEnglishName').value,
+                level: document.getElementById('signupLevel').value,
+                categories: getSelectedValues('signupCategories')
+            };
+
+            try {
+                const res = await fetch(`${getBaseUrl()}/api/v1/members/sign-up/social`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                const result = await res.json();
+                showResponse('signupResponse', result, !result.success);
+            } catch (e) {
+                showResponse('signupResponse', { error: e.message }, true);
+            }
+        }
+
+        // 소셜 로그인
+        async function socialSignIn() {
+            if (!currentProvider || !currentToken) {
+                alert('먼저 소셜 로그인을 해주세요.');
+                return;
+            }
+
+            const data = {
+                provider: currentProvider,
+                idToken: currentToken
+            };
+
+            try {
+                const res = await fetch(`${getBaseUrl()}/api/v1/auth/sign-in/social`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(data)
+                });
+                const result = await res.json();
+                showResponse('signinResponse', result, !result.success);
+
+                if (result.success && result.data) {
+                    document.getElementById('jwtSection').style.display = 'block';
+                    document.getElementById('accessToken').value = result.data.accessToken || '';
+                    document.getElementById('refreshToken').value = result.data.refreshToken || '';
+                }
+            } catch (e) {
+                showResponse('signinResponse', { error: e.message }, true);
+            }
+        }
+
+        // 페이지 로드 시 저장된 설정 불러오기
+        window.onload = function() {
+            const savedKakaoKey = localStorage.getItem('kakaoKey');
+            const savedGoogleClientId = localStorage.getItem('googleClientId');
+            const savedAppleClientId = localStorage.getItem('appleClientId');
+
+            if (savedKakaoKey) document.getElementById('kakaoKey').value = savedKakaoKey;
+            if (savedGoogleClientId) document.getElementById('googleClientId').value = savedGoogleClientId;
+            if (savedAppleClientId) document.getElementById('appleClientId').value = savedAppleClientId;
+        };
+
+        // 설정 저장
+        document.getElementById('kakaoKey').addEventListener('change', (e) => localStorage.setItem('kakaoKey', e.target.value));
+        document.getElementById('googleClientId').addEventListener('change', (e) => localStorage.setItem('googleClientId', e.target.value));
+        document.getElementById('appleClientId').addEventListener('change', (e) => localStorage.setItem('appleClientId', e.target.value));
+    </script>
+</body>
+</html>

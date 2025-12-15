@@ -35,6 +35,13 @@ public class MemberEntity extends BaseModel {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
+	@Enumerated(EnumType.STRING)
+	@Column(name = "provider", nullable = false)
+	private Provider provider;
+
+	@Column(name = "provider_id")
+	private String providerId;
+
 	@Column(name = "korean_name", nullable = false)
 	private String koreanName;
 
@@ -44,7 +51,7 @@ public class MemberEntity extends BaseModel {
 	@Column(name = "email", nullable = false)
 	private String email;
 
-	@Column(name = "password", nullable = false)
+	@Column(name = "password")
 	private String password;
 
 	@Enumerated(EnumType.STRING)
@@ -57,8 +64,10 @@ public class MemberEntity extends BaseModel {
 	@Column(name = "category")
 	private Set<Category> categories = new HashSet<>();
 
-	private MemberEntity(String koreanName, String englishName, String email, String password, Level level,
-		Set<Category> categories) {
+	private MemberEntity(Provider provider, String providerId, String koreanName, String englishName, String email,
+		String password, Level level, Set<Category> categories) {
+		this.provider = provider;
+		this.providerId = providerId;
 		this.koreanName = koreanName;
 		this.englishName = englishName;
 		this.email = email;
@@ -69,7 +78,12 @@ public class MemberEntity extends BaseModel {
 
 	public static MemberEntity create(String koreanName, String englishName, String email, String password,
 		Level level, Set<Category> categories) {
-		return new MemberEntity(koreanName, englishName, email, password, level, categories);
+		return new MemberEntity(Provider.EMAIL, null, koreanName, englishName, email, password, level, categories);
+	}
+
+	public static MemberEntity createSocial(Provider provider, String providerId, String koreanName, String englishName,
+		String email, Level level, Set<Category> categories) {
+		return new MemberEntity(provider, providerId, koreanName, englishName, email, null, level, categories);
 	}
 
 	public void update(String englishName, Level level, Set<Category> categories) {

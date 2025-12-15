@@ -25,6 +25,9 @@ public enum ApiErrorType {
 		LogLevel.WARN),
 	INVALID_PASSWORD_MISMATCH(ApiErrorCode.CLIENT_ERROR, "MEMBER-3", "비밀번호가 일치하지 않습니다.", LogLevel.WARN),
 	DUPLICATED_EMAIL(ApiErrorCode.CLIENT_ERROR, "MEMBER-4", "이미 사용 중인 이메일입니다.", LogLevel.WARN),
+	DUPLICATED_SOCIAL_ACCOUNT(ApiErrorCode.CLIENT_ERROR, "MEMBER-5", "이미 가입된 소셜 계정입니다.", LogLevel.WARN),
+	INVALID_SOCIAL_TOKEN(ApiErrorCode.CLIENT_ERROR, "MEMBER-6", "유효하지 않은 소셜 토큰입니다.", LogLevel.WARN),
+	UNSUPPORTED_PROVIDER(ApiErrorCode.CLIENT_ERROR, "MEMBER-7", "지원하지 않는 소셜 로그인입니다.", LogLevel.WARN),
 
 	// NOTIFICATION
 	DUPLICATED_NOTIFICATION_SCHEDULE(ApiErrorCode.CLIENT_ERROR, "NOTIFICATION-1", "해당 요일에 이미 알림 스케줄이 존재합니다.", LogLevel.WARN),
