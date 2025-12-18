@@ -8,8 +8,8 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import com.voco.voco.tov.domain.model.converter.VlRangeSelectionTypeConverter;
 import com.voco.voco.tov.domain.model.enums.VlRangeSelectionType;
-import com.voco.voco.tov.infrastructure.persistence.converter.VlRangeSelectionTypeConverter;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;

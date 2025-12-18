@@ -1,4 +1,4 @@
-package com.voco.voco.tov.infrastructure.persistence.converter;
+package com.voco.voco.tov.domain.model.converter;
 
 import com.voco.voco.tov.domain.model.enums.VlExamStatus;
 

@@ -8,10 +8,10 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import com.voco.voco.tov.domain.model.converter.VlExamStatusConverter;
+import com.voco.voco.tov.domain.model.converter.VlPassStatusConverter;
 import com.voco.voco.tov.domain.model.enums.VlExamStatus;
 import com.voco.voco.tov.domain.model.enums.VlPassStatus;
-import com.voco.voco.tov.infrastructure.persistence.converter.VlExamStatusConverter;
-import com.voco.voco.tov.infrastructure.persistence.converter.VlPassStatusConverter;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Convert;
