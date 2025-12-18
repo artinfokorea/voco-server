@@ -69,8 +69,15 @@ public class ExamQuestionGenerator {
 		long wordsWithAntonym = words.stream().filter(WordWithDetailsDto::hasAntonym).count();
 		long wordsWithContext = words.stream().filter(WordWithDetailsDto::hasExampleSentence).count();
 
-		int baseAllocation = totalQuestions / enabledTypes.size();
-		int remainder = totalQuestions % enabledTypes.size();
+		boolean hasSynonymAntonym = enabledTypes.contains(VlQuestionType.SYNONYM_MULTIPLE_CHOICE)
+			|| enabledTypes.contains(VlQuestionType.ANTONYM_MULTIPLE_CHOICE);
+
+		int categoryCount = (int)enabledTypes.stream()
+			.filter(t -> t != VlQuestionType.ANTONYM_MULTIPLE_CHOICE)
+			.count();
+
+		int baseAllocation = totalQuestions / categoryCount;
+		int remainder = totalQuestions % categoryCount;
 
 		List<VlQuestionType> fallbackTypes = enabledTypes.stream()
 			.filter(t -> t == VlQuestionType.MEANING_MULTIPLE_CHOICE
@@ -78,21 +85,36 @@ public class ExamQuestionGenerator {
 			.toList();
 
 		int shortfall = 0;
+		int categoryIndex = 0;
 
-		for (int i = 0; i < enabledTypes.size(); i++) {
-			VlQuestionType type = enabledTypes.get(i);
-			int count = baseAllocation + (i < remainder ? 1 : 0);
+		for (VlQuestionType type : enabledTypes) {
+			if (type == VlQuestionType.ANTONYM_MULTIPLE_CHOICE) {
+				continue;
+			}
 
-			int maxAvailable = switch (type) {
-				case SYNONYM_MULTIPLE_CHOICE -> (int)wordsWithSynonym;
-				case ANTONYM_MULTIPLE_CHOICE -> (int)wordsWithAntonym;
-				case CONTEXT_MULTIPLE_CHOICE -> (int)wordsWithContext;
-				default -> words.size();
-			};
+			int count = baseAllocation + (categoryIndex < remainder ? 1 : 0);
+			categoryIndex++;
 
-			int actualCount = Math.min(count, maxAvailable);
-			allocation.put(type, actualCount);
-			shortfall += (count - actualCount);
+			if (type == VlQuestionType.SYNONYM_MULTIPLE_CHOICE && hasSynonymAntonym) {
+				int synonymCount = count / 2;
+				int antonymCount = count - synonymCount;
+
+				int actualSynonym = Math.min(synonymCount, (int)wordsWithSynonym);
+				int actualAntonym = Math.min(antonymCount, (int)wordsWithAntonym);
+
+				allocation.put(VlQuestionType.SYNONYM_MULTIPLE_CHOICE, actualSynonym);
+				allocation.put(VlQuestionType.ANTONYM_MULTIPLE_CHOICE, actualAntonym);
+				shortfall += (synonymCount - actualSynonym) + (antonymCount - actualAntonym);
+			} else {
+				int maxAvailable = switch (type) {
+					case CONTEXT_MULTIPLE_CHOICE -> (int)wordsWithContext;
+					default -> words.size();
+				};
+
+				int actualCount = Math.min(count, maxAvailable);
+				allocation.put(type, actualCount);
+				shortfall += (count - actualCount);
+			}
 		}
 
 		if (shortfall > 0 && !fallbackTypes.isEmpty()) {
