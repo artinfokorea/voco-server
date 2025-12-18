@@ -35,7 +35,10 @@ public enum ApiErrorType {
 
 	// CALL
 	CALL_ANALYSIS_NOT_FOUND(ApiErrorCode.NOT_FOUND, "CALL-1", "분석 결과를 찾을 수 없습니다.", LogLevel.WARN),
-	CALL_ANALYSIS_FORBIDDEN(ApiErrorCode.FORBIDDEN, "CALL-2", "해당 분석 결과에 접근할 권한이 없습니다.", LogLevel.WARN);
+	CALL_ANALYSIS_FORBIDDEN(ApiErrorCode.FORBIDDEN, "CALL-2", "해당 분석 결과에 접근할 권한이 없습니다.", LogLevel.WARN),
+
+	// WORD_GROUP
+	WORD_GROUP_NOT_FOUND(ApiErrorCode.NOT_FOUND, "WORD_GROUP-1", "단어 그룹을 찾을 수 없습니다.", LogLevel.WARN);
 
 	private final ApiErrorCode errorCode;
 	private final String errorNo;
