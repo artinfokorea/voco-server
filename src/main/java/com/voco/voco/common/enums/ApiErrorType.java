@@ -38,7 +38,11 @@ public enum ApiErrorType {
 	CALL_ANALYSIS_FORBIDDEN(ApiErrorCode.FORBIDDEN, "CALL-2", "해당 분석 결과에 접근할 권한이 없습니다.", LogLevel.WARN),
 
 	// WORD_GROUP
-	WORD_GROUP_NOT_FOUND(ApiErrorCode.NOT_FOUND, "WORD_GROUP-1", "단어 그룹을 찾을 수 없습니다.", LogLevel.WARN);
+	WORD_GROUP_NOT_FOUND(ApiErrorCode.NOT_FOUND, "WORD_GROUP-1", "단어 그룹을 찾을 수 없습니다.", LogLevel.WARN),
+	WORD_NOT_FOUND_IN_RANGE(ApiErrorCode.NOT_FOUND, "WORD_GROUP-2", "범위 내 단어가 없습니다.", LogLevel.WARN),
+
+	// EXAM
+	EXAM_IN_PROGRESS(ApiErrorCode.CLIENT_ERROR, "EXAM-1", "진행 중인 시험이 있습니다.", LogLevel.WARN);
 
 	private final ApiErrorCode errorCode;
 	private final String errorNo;

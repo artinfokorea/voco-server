@@ -8,56 +8,50 @@ import java.util.UUID;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.voco.voco.common.enums.ApiErrorType;
+import com.voco.voco.common.exception.CoreException;
 import com.voco.voco.tov.application.dto.in.CreateExamUseCaseDto;
 import com.voco.voco.tov.domain.interfaces.VlExamCommandRepository;
+import com.voco.voco.tov.domain.interfaces.VlExamQueryRepository;
 import com.voco.voco.tov.domain.interfaces.VlExamQuestionCommandRepository;
 import com.voco.voco.tov.domain.interfaces.VlUserQueryRepository;
-import com.voco.voco.tov.domain.interfaces.VlWordGroupItemQueryRepository;
-import com.voco.voco.tov.domain.interfaces.VlWordGroupQueryRepository;
-import com.voco.voco.tov.domain.interfaces.VlWordQueryRepository;
-import com.voco.voco.tov.domain.interfaces.dto.WordWithDetailsDto;
 import com.voco.voco.tov.domain.model.VlExamEntity;
 import com.voco.voco.tov.domain.model.VlExamQuestionEntity;
-import com.voco.voco.tov.domain.model.VlWordGroupEntity;
-import com.voco.voco.tov.domain.model.VlWordGroupItemEntity;
-import com.voco.voco.tov.domain.service.ExamQuestionGenerator;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 @Component
 @RequiredArgsConstructor
 public class CreateExamUseCase {
 
 	private final VlUserQueryRepository vlUserQueryRepository;
-	private final VlWordGroupQueryRepository vlWordGroupQueryRepository;
-	private final VlWordGroupItemQueryRepository vlWordGroupItemQueryRepository;
-	private final VlWordQueryRepository vlWordQueryRepository;
+	private final VlExamQueryRepository vlExamQueryRepository;
 	private final VlExamCommandRepository vlExamCommandRepository;
 	private final VlExamQuestionCommandRepository vlExamQuestionCommandRepository;
-	private final ExamQuestionGenerator examQuestionGenerator;
+	private final ExamWordsCacheService examWordsCacheService;
 
 	@Transactional
 	public UUID execute(CreateExamUseCaseDto dto) {
 		vlUserQueryRepository.findByIdOrThrow(dto.memberId());
-		VlWordGroupEntity group = vlWordGroupQueryRepository.findByIdOrThrow(dto.groupId());
 
-		int from = dto.chapterFrom() * 1000 + (dto.stepFrom() != null ? dto.stepFrom() : 0);
-		int to = dto.chapterTo() * 1000 + (dto.stepTo() != null ? dto.stepTo() : 999);
-
-		List<VlWordGroupItemEntity> items = vlWordGroupItemQueryRepository.findByWordGroupIdAndWordSeqBetween(
-			dto.groupId(), from, to);
-
-		if (items.isEmpty()) {
-			throw new IllegalArgumentException("범위 내 단어가 없습니다.");
+		if (vlExamQueryRepository.existsInProgressByUserId(dto.memberId())) {
+			throw new CoreException(ApiErrorType.EXAM_IN_PROGRESS);
 		}
 
-		List<UUID> masterWordIds = items.stream()
-			.map(VlWordGroupItemEntity::getMasterWordId)
-			.toList();
+		List<VlExamQuestionEntity> questionTemplates = examWordsCacheService.getQuestionsTemplate(
+			dto.groupId(),
+			dto.chapterFrom(),
+			dto.chapterTo(),
+			dto.stepFrom(),
+			dto.stepTo(),
+			dto.size()
+		);
 
-		List<WordWithDetailsDto> words = vlWordQueryRepository.findWordsWithDetailsByMasterWordIds(masterWordIds);
+		log.info("[Cache HIT] 캐시에서 문제 템플릿 조회 완료 - {}개 문제", questionTemplates.size());
 
-		int actualSize = Math.min(dto.size(), items.size());
+		int actualSize = questionTemplates.size();
 
 		VlExamEntity exam = VlExamEntity.create(
 			dto.memberId(),
@@ -70,21 +64,14 @@ public class CreateExamUseCase {
 		);
 		VlExamEntity savedExam = vlExamCommandRepository.save(exam);
 
-		List<VlExamQuestionEntity> questions = examQuestionGenerator.generate(
-			savedExam.getId(),
-			group,
-			words,
-			actualSize
-		);
-
-		List<VlExamQuestionEntity> shuffledQuestions = new ArrayList<>(questions);
+		List<VlExamQuestionEntity> shuffledQuestions = new ArrayList<>(questionTemplates);
 		Collections.shuffle(shuffledQuestions);
 
 		List<VlExamQuestionEntity> numberedQuestions = new ArrayList<>();
 		for (int i = 0; i < shuffledQuestions.size(); i++) {
 			VlExamQuestionEntity q = shuffledQuestions.get(i);
 			numberedQuestions.add(VlExamQuestionEntity.create(
-				q.getExamId(),
+				savedExam.getId(),
 				q.getMasterWordId(),
 				q.getVlQuestionType(),
 				i + 1,
