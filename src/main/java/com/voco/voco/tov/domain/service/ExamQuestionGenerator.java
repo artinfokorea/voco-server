@@ -135,7 +135,7 @@ public class ExamQuestionGenerator {
 		Map<VlQuestionType, Integer> typeAllocation) {
 
 		List<VlExamQuestionEntity> questions = new ArrayList<>();
-		Set<String> usedAnswers = new HashSet<>();
+		Set<UUID> usedWordIds = new HashSet<>();
 
 		List<WordWithDetailsDto> shuffledWords = new ArrayList<>(words);
 		Collections.shuffle(shuffledWords);
@@ -152,15 +152,19 @@ public class ExamQuestionGenerator {
 				if (count <= 0)
 					break;
 
+				if (usedWordIds.contains(word.getMasterWordId())) {
+					continue;
+				}
+
 				String answer = getAnswerForType(word, type);
-				if (answer == null || usedAnswers.contains(answer)) {
+				if (answer == null) {
 					continue;
 				}
 
 				VlExamQuestionEntity question = createQuestion(examId, word, type, 0, shuffledWords);
 				if (question != null) {
 					questions.add(question);
-					usedAnswers.add(answer);
+					usedWordIds.add(word.getMasterWordId());
 					count--;
 				}
 			}
