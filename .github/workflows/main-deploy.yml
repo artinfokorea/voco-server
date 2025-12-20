@@ -7,7 +7,8 @@ on:
 env:
   DOCKER_IMAGE: ghcr.io/${{ github.repository_owner }}/voco-server
   VERSION: ${{ github.sha }}
-  CONTAINER_NAME: voco-server
+  CONTAINER_1: voco-server-1
+  CONTAINER_2: voco-server-2
 
 jobs:
   build:
@@ -86,13 +87,52 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Docker run
+      - name: Pull new image
+        run: docker pull ${{ env.DOCKER_IMAGE }}:${{ env.VERSION }}
+
+      - name: Deploy container 1 (Rolling Update)
         run: |
-          docker rm -f ${{ env.CONTAINER_NAME }} || true
+          docker rm -f ${{ env.CONTAINER_1 }} || true
           docker run -d -p 8080:8080 \
-            --name ${{ env.CONTAINER_NAME }} \
-            --cpus=1 \
+            --name ${{ env.CONTAINER_1 }} \
+            --cpus=0.5 \
             --restart always \
             ${{ env.DOCKER_IMAGE }}:${{ env.VERSION }}
-          
-          docker image prune -af
+
+      - name: Health check container 1
+        run: |
+          for i in {1..30}; do
+            if curl -sf http://localhost:8080/actuator/health > /dev/null 2>&1; then
+              echo "Container 1 is healthy"
+              exit 0
+            fi
+            echo "Waiting for container 1... ($i/30)"
+            sleep 2
+          done
+          echo "Container 1 health check failed"
+          exit 1
+
+      - name: Deploy container 2 (Rolling Update)
+        run: |
+          docker rm -f ${{ env.CONTAINER_2 }} || true
+          docker run -d -p 8081:8080 \
+            --name ${{ env.CONTAINER_2 }} \
+            --cpus=0.5 \
+            --restart always \
+            ${{ env.DOCKER_IMAGE }}:${{ env.VERSION }}
+
+      - name: Health check container 2
+        run: |
+          for i in {1..30}; do
+            if curl -sf http://localhost:8081/actuator/health > /dev/null 2>&1; then
+              echo "Container 2 is healthy"
+              exit 0
+            fi
+            echo "Waiting for container 2... ($i/30)"
+            sleep 2
+          done
+          echo "Container 2 health check failed"
+          exit 1
+
+      - name: Cleanup old images
+        run: docker image prune -af

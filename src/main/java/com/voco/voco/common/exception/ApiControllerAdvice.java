@@ -17,7 +17,7 @@ import com.voco.voco.common.enums.ApiErrorType;
 import com.voco.voco.common.enums.ApiResultType;
 
 @Slf4j
-@RestControllerAdvice
+@RestControllerAdvice(basePackages = "com.voco.voco")
 class ApiControllerAdvice {
 	@ExceptionHandler(CoreException.class)
 	public ResponseEntity<Object> handleCoreException(CoreException e) {
