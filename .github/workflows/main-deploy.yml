@@ -101,12 +101,12 @@ jobs:
 
       - name: Health check container 1
         run: |
-          for i in {1..30}; do
+          for i in {1..100}; do
             if curl -sf http://localhost:8080/actuator/health > /dev/null 2>&1; then
               echo "Container 1 is healthy"
               exit 0
             fi
-            echo "Waiting for container 1... ($i/30)"
+            echo "Waiting for container 1... ($i/100)"
             sleep 2
           done
           echo "Container 1 health check failed"
@@ -123,12 +123,12 @@ jobs:
 
       - name: Health check container 2
         run: |
-          for i in {1..30}; do
+          for i in {1..100}; do
             if curl -sf http://localhost:8081/actuator/health > /dev/null 2>&1; then
               echo "Container 2 is healthy"
               exit 0
             fi
-            echo "Waiting for container 2... ($i/30)"
+            echo "Waiting for container 2... ($i/100)"
             sleep 2
           done
           echo "Container 2 health check failed"
