@@ -66,6 +66,9 @@ dependencies {
 
     // ArchUnit
     testImplementation 'com.tngtech.archunit:archunit-junit5:1.2.1'
+
+    // LiveKit
+    implementation 'io.livekit:livekit-server:0.10.1'
 }
 
 tasks.named('test') {
