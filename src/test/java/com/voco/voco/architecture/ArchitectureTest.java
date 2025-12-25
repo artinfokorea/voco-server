@@ -78,11 +78,13 @@ class ArchitectureTest {
 				.layer("Application").definedBy("..application..")
 				.layer("Domain").definedBy("..domain..")
 				.layer("Infrastructure").definedBy("..infrastructure..")
+				.layer("Batch").definedBy("..batch..")
 
 				.whereLayer("Presentation").mayNotBeAccessedByAnyLayer()
-				.whereLayer("Application").mayOnlyBeAccessedByLayers("Presentation", "Infrastructure")
-				.whereLayer("Domain").mayOnlyBeAccessedByLayers("Application", "Infrastructure")
+				.whereLayer("Application").mayOnlyBeAccessedByLayers("Presentation", "Infrastructure", "Batch")
+				.whereLayer("Domain").mayOnlyBeAccessedByLayers("Application", "Infrastructure", "Batch")
 				.whereLayer("Infrastructure").mayNotBeAccessedByAnyLayer()
+				.whereLayer("Batch").mayNotBeAccessedByAnyLayer()
 
 				.ignoreDependency(
 					resideInAPackage("..presentation.."),
