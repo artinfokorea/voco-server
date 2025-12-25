@@ -3,6 +3,7 @@ package com.voco.voco.tov.application;
 import java.util.List;
 import java.util.UUID;
 
+import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
@@ -30,7 +31,14 @@ public class ExamWordsCacheService {
 	private final VlWordGroupQueryRepository vlWordGroupQueryRepository;
 	private final ExamQuestionGenerator examQuestionGenerator;
 
-	@Cacheable(value = "examQuestions", key = "#groupId + '_' + #chapterFrom + '_' + #chapterTo + '_' + #stepFrom + '_' + #stepTo + '_' + #size")
+	@CacheEvict(value = "examQuestions", key = "#groupId + '_' + #chapterFrom + '_' + #chapterTo + '_' + #stepFrom + '_' + #stepTo + '_' + #size")
+	public void evictQuestionsTemplate(UUID groupId, Integer chapterFrom, Integer chapterTo,
+		Integer stepFrom, Integer stepTo, Integer size) {
+		log.info("[Cache EVICT] 문제 템플릿 캐시 삭제 - groupId: {}, chapter: {}-{}, step: {}-{}, size: {}",
+			groupId, chapterFrom, chapterTo, stepFrom, stepTo, size);
+	}
+
+	@Cacheable(value = "examQuestions", key = "#groupId + '_' + #chapterFrom + '_' + #chapterTo + '_' + #stepFrom + '_' + #stepTo + '_' + #size", unless = "#result.isEmpty()")
 	public List<VlExamQuestionEntity> getQuestionsTemplate(UUID groupId, Integer chapterFrom, Integer chapterTo,
 		Integer stepFrom, Integer stepTo, Integer size) {
 

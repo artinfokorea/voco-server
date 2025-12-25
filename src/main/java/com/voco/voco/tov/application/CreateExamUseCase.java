@@ -49,7 +49,31 @@ public class CreateExamUseCase {
 			dto.size()
 		);
 
-		log.info("[Cache HIT] 캐시에서 문제 템플릿 조회 완료 - {}개 문제", questionTemplates.size());
+		if (questionTemplates.isEmpty()) {
+			log.info("[Cache] 빈 캐시 감지 - 캐시 삭제 후 재생성 시도");
+			examWordsCacheService.evictQuestionsTemplate(
+				dto.groupId(),
+				dto.chapterFrom(),
+				dto.chapterTo(),
+				dto.stepFrom(),
+				dto.stepTo(),
+				dto.size()
+			);
+			questionTemplates = examWordsCacheService.getQuestionsTemplate(
+				dto.groupId(),
+				dto.chapterFrom(),
+				dto.chapterTo(),
+				dto.stepFrom(),
+				dto.stepTo(),
+				dto.size()
+			);
+		}
+
+		log.info("[Cache] 문제 템플릿 조회 완료 - {}개 문제", questionTemplates.size());
+
+		if (questionTemplates.isEmpty()) {
+			throw new CoreException(ApiErrorType.EXAM_NO_QUESTIONS_GENERATED);
+		}
 
 		int actualSize = questionTemplates.size();
 
