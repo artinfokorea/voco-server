@@ -17,6 +17,7 @@ import com.voco.voco.tov.domain.interfaces.VlExamQuestionCommandRepository;
 import com.voco.voco.tov.domain.interfaces.VlUserQueryRepository;
 import com.voco.voco.tov.domain.model.VlExamEntity;
 import com.voco.voco.tov.domain.model.VlExamQuestionEntity;
+import com.voco.voco.tov.domain.model.enums.VlQuestionType;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -91,6 +92,8 @@ public class CreateExamUseCase {
 		List<VlExamQuestionEntity> shuffledQuestions = new ArrayList<>(questionTemplates);
 		Collections.shuffle(shuffledQuestions);
 
+		moveSpellingAwayFromLast(shuffledQuestions);
+
 		List<VlExamQuestionEntity> numberedQuestions = new ArrayList<>();
 		for (int i = 0; i < shuffledQuestions.size(); i++) {
 			VlExamQuestionEntity q = shuffledQuestions.get(i);
@@ -112,5 +115,25 @@ public class CreateExamUseCase {
 		vlExamQuestionCommandRepository.saveAll(numberedQuestions);
 
 		return savedExam.getId();
+	}
+
+	private void moveSpellingAwayFromLast(List<VlExamQuestionEntity> questions) {
+		if (questions.size() < 2) {
+			return;
+		}
+
+		int lastIndex = questions.size() - 1;
+		VlExamQuestionEntity lastQuestion = questions.get(lastIndex);
+
+		if (lastQuestion.getVlQuestionType() != VlQuestionType.SPELLING_SUBJECTIVE) {
+			return;
+		}
+
+		for (int i = 0; i < lastIndex; i++) {
+			if (questions.get(i).getVlQuestionType() != VlQuestionType.SPELLING_SUBJECTIVE) {
+				Collections.swap(questions, i, lastIndex);
+				return;
+			}
+		}
 	}
 }
