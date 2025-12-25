@@ -117,6 +117,10 @@ public class VlExamQuestionEntity {
 		this.answeredAt = LocalDateTime.now();
 	}
 
+	public void markCorrect(boolean isCorrect) {
+		this.isCorrect = isCorrect;
+	}
+
 	public void delete() {
 		this.deletedAt = LocalDateTime.now();
 	}
