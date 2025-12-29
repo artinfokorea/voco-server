@@ -16,6 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.voco.voco.app.call.application.interfaces.LiveKitTokenAdaptor;
 import com.voco.voco.app.call.application.usecase.dto.out.LiveKitTokenInfo;
+import com.voco.voco.app.call.domain.interfaces.CallCommandRepository;
 import com.voco.voco.app.member.domain.interfaces.MemberQueryRepository;
 import com.voco.voco.app.member.domain.model.Level;
 import com.voco.voco.app.member.domain.model.MemberEntity;
@@ -43,6 +44,9 @@ class CreateLiveKitTokenUseCaseTest {
 	@Mock
 	private ObjectMapper objectMapper;
 
+	@Mock
+	private CallCommandRepository callCommandRepository;
+
 	private static final Long MEMBER_ID = 1L;
 	private static final Long SCENARIO_ID = 10L;
 	private static final String MOCK_TOKEN = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.test";
@@ -60,6 +64,7 @@ class CreateLiveKitTokenUseCaseTest {
 			given(memberQueryRepository.findByIdOrThrow(MEMBER_ID)).willReturn(member);
 			given(scenarioQueryRepository.findByIdOrThrow(SCENARIO_ID)).willReturn(scenario);
 			given(objectMapper.writeValueAsString(any())).willReturn("{}");
+			given(callCommandRepository.save(any())).willReturn(100L);
 			given(liveKitTokenAdaptor.createToken(anyString(), eq(String.valueOf(MEMBER_ID)), eq("홍길동"), anyString()))
 				.willReturn(MOCK_TOKEN);
 
@@ -69,6 +74,7 @@ class CreateLiveKitTokenUseCaseTest {
 			// then
 			assertThat(result.token()).isEqualTo(MOCK_TOKEN);
 			assertThat(result.roomName()).startsWith("room-1-10-beginner-");
+			assertThat(result.callId()).isEqualTo(100L);
 		}
 
 		@Test
@@ -80,6 +86,7 @@ class CreateLiveKitTokenUseCaseTest {
 			given(memberQueryRepository.findByIdOrThrow(MEMBER_ID)).willReturn(member);
 			given(scenarioQueryRepository.findByIdOrThrow(SCENARIO_ID)).willReturn(scenario);
 			given(objectMapper.writeValueAsString(any())).willReturn("{}");
+			given(callCommandRepository.save(any())).willReturn(100L);
 			given(liveKitTokenAdaptor.createToken(anyString(), anyString(), anyString(), anyString()))
 				.willReturn(MOCK_TOKEN);
 
@@ -101,6 +108,7 @@ class CreateLiveKitTokenUseCaseTest {
 			given(memberQueryRepository.findByIdOrThrow(MEMBER_ID)).willReturn(member);
 			given(scenarioQueryRepository.findByIdOrThrow(SCENARIO_ID)).willReturn(scenario);
 			given(objectMapper.writeValueAsString(any())).willReturn("{\"scenarioId\":10}");
+			given(callCommandRepository.save(any())).willReturn(100L);
 			given(liveKitTokenAdaptor.createToken(anyString(), anyString(), anyString(), anyString()))
 				.willReturn(MOCK_TOKEN);
 
@@ -126,6 +134,7 @@ class CreateLiveKitTokenUseCaseTest {
 			given(memberQueryRepository.findByIdOrThrow(MEMBER_ID)).willReturn(member);
 			given(scenarioQueryRepository.findByIdOrThrow(SCENARIO_ID)).willReturn(scenario);
 			given(objectMapper.writeValueAsString(any())).willReturn("{}");
+			given(callCommandRepository.save(any())).willReturn(100L);
 			given(liveKitTokenAdaptor.createToken(anyString(), anyString(), anyString(), anyString()))
 				.willReturn(MOCK_TOKEN);
 

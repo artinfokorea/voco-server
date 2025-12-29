@@ -32,16 +32,20 @@ public class CallEntity extends BaseModel {
 	@Column(name = "scenario_id", nullable = false)
 	private Long scenarioId;
 
+	@Column(name = "room_name", nullable = false, length = 100)
+	private String roomName;
+
 	@Column(name = "analysis_id")
 	private Long analysisId;
 
-	private CallEntity(Long memberId, Long scenarioId) {
+	private CallEntity(Long memberId, Long scenarioId, String roomName) {
 		this.memberId = memberId;
 		this.scenarioId = scenarioId;
+		this.roomName = roomName;
 	}
 
-	public static CallEntity create(Long memberId, Long scenarioId) {
-		return new CallEntity(memberId, scenarioId);
+	public static CallEntity create(Long memberId, Long scenarioId, String roomName) {
+		return new CallEntity(memberId, scenarioId, roomName);
 	}
 
 	public void updateAnalysisId(Long analysisId) {

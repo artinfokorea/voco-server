@@ -10,9 +10,12 @@ public record LiveKitTokenResponse(
 	String token,
 
 	@Schema(description = "방 이름")
-	String roomName
+	String roomName,
+
+	@Schema(description = "통화 ID")
+	Long callId
 ) {
 	public static LiveKitTokenResponse from(LiveKitTokenInfo tokenInfo) {
-		return new LiveKitTokenResponse(tokenInfo.token(), tokenInfo.roomName());
+		return new LiveKitTokenResponse(tokenInfo.token(), tokenInfo.roomName(), tokenInfo.callId());
 	}
 }
