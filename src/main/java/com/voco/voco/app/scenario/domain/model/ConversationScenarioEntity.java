@@ -58,20 +58,20 @@ public class ConversationScenarioEntity extends BaseModel {
 	@Column(name = "completion_rule_detail")
 	private List<String> completionRuleDetail;
 
-	@OneToOne(mappedBy = "scenario", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToOne(mappedBy = "scenario", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
 	private ScenarioContextEntity scenarioContext;
 
-	@OneToOne(mappedBy = "scenario", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToOne(mappedBy = "scenario", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
 	private LanguageRulesEntity languageRules;
 
-	@OneToOne(mappedBy = "scenario", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToOne(mappedBy = "scenario", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
 	private BehaviorRulesEntity behaviorRules;
 
-	@OneToMany(mappedBy = "scenario", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "scenario", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
 	@OrderBy("stateOrder ASC")
 	private List<ConversationStateEntity> conversationStates = new ArrayList<>();
 
-	@OneToMany(mappedBy = "scenario", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+	@OneToMany(mappedBy = "scenario", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
 	private List<ConversationSlotEntity> conversationSlots = new ArrayList<>();
 
 	private ConversationScenarioEntity(
@@ -131,5 +131,50 @@ public class ConversationScenarioEntity extends BaseModel {
 	public void addConversationSlot(ConversationSlotEntity slot) {
 		this.conversationSlots.add(slot);
 		slot.setScenario(this);
+	}
+
+	public void update(
+		String name,
+		Level level,
+		String aiRole,
+		String userRole,
+		String completionRule,
+		List<String> completionRuleDetail
+	) {
+		this.name = name;
+		this.level = level;
+		this.aiRole = aiRole;
+		this.userRole = userRole;
+		this.completionRule = completionRule;
+		this.completionRuleDetail = completionRuleDetail;
+	}
+
+	public void updateScenarioContext(ScenarioContextEntity context) {
+		this.scenarioContext = context;
+		context.setScenario(this);
+	}
+
+	public void updateLanguageRules(LanguageRulesEntity languageRules) {
+		this.languageRules = languageRules;
+		languageRules.setScenario(this);
+	}
+
+	public void updateBehaviorRules(BehaviorRulesEntity behaviorRules) {
+		this.behaviorRules = behaviorRules;
+		behaviorRules.setScenario(this);
+	}
+
+	public void updateConversationStates(List<ConversationStateEntity> states) {
+		this.conversationStates.clear();
+		if (states != null) {
+			states.forEach(this::addConversationState);
+		}
+	}
+
+	public void updateConversationSlots(List<ConversationSlotEntity> slots) {
+		this.conversationSlots.clear();
+		if (slots != null) {
+			slots.forEach(this::addConversationSlot);
+		}
 	}
 }
