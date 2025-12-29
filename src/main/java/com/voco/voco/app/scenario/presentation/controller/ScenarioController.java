@@ -42,7 +42,7 @@ public class ScenarioController {
 	) {
 		Page<ScenarioSummaryInfo> result = getScenariosUseCase.execute(
 			request.level(),
-			request.page(),
+			request.getPageIndex(),
 			request.size()
 		);
 		return ApiResponse.success(result.map(ScenarioSummaryResponse::from));

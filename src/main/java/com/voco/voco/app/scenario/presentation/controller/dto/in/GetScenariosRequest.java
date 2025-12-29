@@ -9,18 +9,22 @@ public record GetScenariosRequest(
 	@Schema(description = "레벨 필터 (null이면 전체 조회)", example = "BEGINNER")
 	Level level,
 
-	@Schema(description = "페이지 번호 (0부터 시작)", example = "0")
+	@Schema(description = "페이지 번호 (1부터 시작)", example = "1")
 	Integer page,
 
 	@Schema(description = "페이지 크기", example = "10")
 	Integer size
 ) {
 	public GetScenariosRequest {
-		if (page == null) {
-			page = 0;
+		if (page == null || page < 1) {
+			page = 1;
 		}
 		if (size == null) {
 			size = 10;
 		}
+	}
+
+	public int getPageIndex() {
+		return page - 1;
 	}
 }

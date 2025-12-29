@@ -170,7 +170,7 @@ class GetScenariosApiTest {
 		// when
 		ResultActions result = mockMvc.perform(get(SCENARIO_URL)
 			.header("Authorization", "Bearer " + accessToken)
-			.param("page", "0")
+			.param("page", "1")
 			.param("size", "10"));
 
 		// then
