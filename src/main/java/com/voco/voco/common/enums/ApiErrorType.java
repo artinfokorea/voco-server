@@ -44,7 +44,10 @@ public enum ApiErrorType {
 
 	// EXAM
 	EXAM_IN_PROGRESS(ApiErrorCode.CLIENT_ERROR, "EXAM-1", "진행 중인 시험이 있습니다.", LogLevel.WARN),
-	EXAM_NO_QUESTIONS_GENERATED(ApiErrorCode.CLIENT_ERROR, "EXAM-2", "생성 가능한 문제가 없습니다.", LogLevel.WARN);
+	EXAM_NO_QUESTIONS_GENERATED(ApiErrorCode.CLIENT_ERROR, "EXAM-2", "생성 가능한 문제가 없습니다.", LogLevel.WARN),
+
+	// SCENARIO
+	SCENARIO_NOT_FOUND(ApiErrorCode.NOT_FOUND, "SCENARIO-1", "시나리오를 찾을 수 없습니다.", LogLevel.WARN);
 
 	private final ApiErrorCode errorCode;
 	private final String errorNo;

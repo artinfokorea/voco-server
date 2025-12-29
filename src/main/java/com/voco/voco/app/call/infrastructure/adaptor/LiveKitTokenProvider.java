@@ -19,7 +19,7 @@ public class LiveKitTokenProvider implements LiveKitTokenAdaptor {
 	private final LiveKitProperties liveKitProperties;
 
 	@Override
-	public String createToken(String roomName, String participantIdentity, String participantName) {
+	public String createToken(String roomName, String participantIdentity, String participantName, String metadata) {
 		AccessToken token = new AccessToken(
 			liveKitProperties.apiKey(),
 			liveKitProperties.apiSecret()
@@ -27,6 +27,7 @@ public class LiveKitTokenProvider implements LiveKitTokenAdaptor {
 
 		token.setIdentity(participantIdentity);
 		token.setName(participantName);
+		token.setMetadata(metadata);
 		token.setTtl(TOKEN_TTL_SECONDS);
 		token.addGrants(new RoomJoin(true), new RoomName(roomName));
 

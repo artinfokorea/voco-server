@@ -21,6 +21,14 @@ public class BaseModel {
 	@Column(name = "deleted_at")
 	private LocalDateTime deletedAt;
 
+	public LocalDateTime getCreatedAt() {
+		return createdAt;
+	}
+
+	public LocalDateTime getUpdatedAt() {
+		return updatedAt;
+	}
+
 	public void delete() {
 		this.deletedAt = LocalDateTime.now();
 	}
