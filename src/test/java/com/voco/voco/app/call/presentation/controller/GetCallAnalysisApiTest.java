@@ -29,7 +29,6 @@ import com.voco.voco.app.member.domain.interfaces.MemberQueryRepository;
 import com.voco.voco.app.member.domain.model.Category;
 import com.voco.voco.app.member.domain.model.Level;
 import com.voco.voco.app.member.presentation.controller.dto.in.SignUpRequest;
-import com.voco.voco.app.scenario.domain.model.ScenarioEntity;
 
 import jakarta.persistence.EntityManager;
 
