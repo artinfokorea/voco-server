@@ -5,12 +5,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.voco.voco.app.scenario.application.usecase.dto.in.UpdateScenarioUseCaseDto;
 import com.voco.voco.app.scenario.domain.interfaces.ScenarioQueryRepository;
-import com.voco.voco.app.scenario.domain.model.BehaviorRulesEntity;
 import com.voco.voco.app.scenario.domain.model.ConversationScenarioEntity;
 import com.voco.voco.app.scenario.domain.model.ConversationSlotEntity;
 import com.voco.voco.app.scenario.domain.model.ConversationStateEntity;
-import com.voco.voco.app.scenario.domain.model.LanguageRulesEntity;
-import com.voco.voco.app.scenario.domain.model.ScenarioContextEntity;
 
 import lombok.RequiredArgsConstructor;
 
@@ -33,23 +30,18 @@ public class UpdateScenarioUseCase {
 			dto.completionRuleDetail()
 		);
 
-		ScenarioContextEntity context = ScenarioContextEntity.create(
+		scenario.updateScenarioContext(
 			dto.scenarioContext().context(),
 			dto.scenarioContext().personality()
 		);
-		scenario.updateScenarioContext(context);
 
-		LanguageRulesEntity languageRules = LanguageRulesEntity.create(
+		scenario.updateLanguageRules(
 			dto.languageRules().vocabularyRules(),
 			dto.languageRules().sentenceRules(),
 			dto.languageRules().outputConstraints()
 		);
-		scenario.updateLanguageRules(languageRules);
 
-		BehaviorRulesEntity behaviorRules = BehaviorRulesEntity.create(
-			dto.behaviorRules().rules()
-		);
-		scenario.updateBehaviorRules(behaviorRules);
+		scenario.updateBehaviorRules(dto.behaviorRules().rules());
 
 		if (dto.conversationStates() != null) {
 			scenario.updateConversationStates(

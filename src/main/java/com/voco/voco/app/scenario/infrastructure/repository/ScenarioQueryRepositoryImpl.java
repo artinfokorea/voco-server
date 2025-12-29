@@ -22,20 +22,20 @@ public class ScenarioQueryRepositoryImpl implements ScenarioQueryRepository {
 
 	@Override
 	public Optional<ConversationScenarioEntity> findById(Long id) {
-		return scenarioJpaRepository.findById(id);
+		return scenarioJpaRepository.findByIdAndDeletedAtIsNull(id);
 	}
 
 	@Override
 	public ConversationScenarioEntity findByIdOrThrow(Long id) {
-		return scenarioJpaRepository.findById(id)
+		return scenarioJpaRepository.findByIdAndDeletedAtIsNull(id)
 			.orElseThrow(() -> new CoreException(ApiErrorType.SCENARIO_NOT_FOUND));
 	}
 
 	@Override
 	public Page<ConversationScenarioEntity> findAllByLevel(Level level, Pageable pageable) {
 		if (level == null) {
-			return scenarioJpaRepository.findAll(pageable);
+			return scenarioJpaRepository.findByDeletedAtIsNull(pageable);
 		}
-		return scenarioJpaRepository.findByLevel(level, pageable);
+		return scenarioJpaRepository.findByLevelAndDeletedAtIsNull(level, pageable);
 	}
 }

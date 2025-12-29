@@ -149,19 +149,35 @@ public class ConversationScenarioEntity extends BaseModel {
 		this.completionRuleDetail = completionRuleDetail;
 	}
 
-	public void updateScenarioContext(ScenarioContextEntity context) {
-		this.scenarioContext = context;
-		context.setScenario(this);
+	public void updateScenarioContext(String context, List<String> personality) {
+		if (this.scenarioContext != null) {
+			this.scenarioContext.update(context, personality);
+		} else {
+			ScenarioContextEntity newContext = ScenarioContextEntity.create(context, personality);
+			this.scenarioContext = newContext;
+			newContext.setScenario(this);
+		}
 	}
 
-	public void updateLanguageRules(LanguageRulesEntity languageRules) {
-		this.languageRules = languageRules;
-		languageRules.setScenario(this);
+	public void updateLanguageRules(List<String> vocabularyRules, List<String> sentenceRules,
+		List<String> outputConstraints) {
+		if (this.languageRules != null) {
+			this.languageRules.update(vocabularyRules, sentenceRules, outputConstraints);
+		} else {
+			LanguageRulesEntity newRules = LanguageRulesEntity.create(vocabularyRules, sentenceRules, outputConstraints);
+			this.languageRules = newRules;
+			newRules.setScenario(this);
+		}
 	}
 
-	public void updateBehaviorRules(BehaviorRulesEntity behaviorRules) {
-		this.behaviorRules = behaviorRules;
-		behaviorRules.setScenario(this);
+	public void updateBehaviorRules(List<String> rules) {
+		if (this.behaviorRules != null) {
+			this.behaviorRules.update(rules);
+		} else {
+			BehaviorRulesEntity newRules = BehaviorRulesEntity.create(rules);
+			this.behaviorRules = newRules;
+			newRules.setScenario(this);
+		}
 	}
 
 	public void updateConversationStates(List<ConversationStateEntity> states) {

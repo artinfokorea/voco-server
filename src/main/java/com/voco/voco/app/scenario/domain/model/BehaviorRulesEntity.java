@@ -52,4 +52,8 @@ public class BehaviorRulesEntity extends BaseModel {
 	public void setScenario(ConversationScenarioEntity scenario) {
 		this.scenario = scenario;
 	}
+
+	public void update(List<String> rules) {
+		this.rules = rules;
+	}
 }

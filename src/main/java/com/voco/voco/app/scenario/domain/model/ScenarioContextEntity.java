@@ -56,4 +56,9 @@ public class ScenarioContextEntity extends BaseModel {
 	public void setScenario(ConversationScenarioEntity scenario) {
 		this.scenario = scenario;
 	}
+
+	public void update(String context, List<String> personality) {
+		this.context = context;
+		this.personality = personality;
+	}
 }

@@ -64,4 +64,10 @@ public class LanguageRulesEntity extends BaseModel {
 	public void setScenario(ConversationScenarioEntity scenario) {
 		this.scenario = scenario;
 	}
+
+	public void update(List<String> vocabularyRules, List<String> sentenceRules, List<String> outputConstraints) {
+		this.vocabularyRules = vocabularyRules;
+		this.sentenceRules = sentenceRules;
+		this.outputConstraints = outputConstraints;
+	}
 }
