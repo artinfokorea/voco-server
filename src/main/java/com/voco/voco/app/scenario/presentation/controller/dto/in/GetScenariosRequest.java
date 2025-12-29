@@ -24,6 +24,7 @@ public record GetScenariosRequest(
 		}
 	}
 
+	@Schema(hidden = true)
 	public int getPageIndex() {
 		return page - 1;
 	}
