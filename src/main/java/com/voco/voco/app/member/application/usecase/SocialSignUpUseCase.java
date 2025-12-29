@@ -37,8 +37,7 @@ public class SocialSignUpUseCase {
 			dto.koreanName(),
 			dto.englishName(),
 			socialUserInfo.email(),
-			dto.level(),
-			dto.categories()
+			dto.level()
 		);
 
 		return memberCommandRepository.save(member);

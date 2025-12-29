@@ -3,8 +3,6 @@ package com.voco.voco.app.call.application.usecase;
 import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
-import java.util.Set;
-
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
@@ -16,7 +14,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import com.voco.voco.app.call.application.interfaces.LiveKitTokenAdaptor;
 import com.voco.voco.app.call.application.usecase.dto.out.LiveKitTokenInfo;
 import com.voco.voco.app.member.domain.interfaces.MemberQueryRepository;
-import com.voco.voco.app.member.domain.model.Category;
 import com.voco.voco.app.member.domain.model.Level;
 import com.voco.voco.app.member.domain.model.MemberEntity;
 
@@ -137,8 +134,7 @@ class CreateLiveKitTokenUseCaseTest {
 			"Hong Gildong",
 			"test@example.com",
 			"encodedPassword",
-			level,
-			Set.of(Category.DAILY)
+			level
 		);
 		try {
 			java.lang.reflect.Field idField = MemberEntity.class.getDeclaredField("id");

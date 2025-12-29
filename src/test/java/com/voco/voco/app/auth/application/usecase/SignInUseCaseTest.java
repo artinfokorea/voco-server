@@ -14,15 +14,12 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
-import java.util.Set;
-
 import com.voco.voco.app.auth.application.usecase.dto.in.SignInUseCaseDto;
 import com.voco.voco.app.auth.application.usecase.dto.out.TokenInfo;
 import com.voco.voco.app.auth.domain.interfaces.TokenCommandRepository;
 import com.voco.voco.app.auth.domain.interfaces.TokenQueryRepository;
 import com.voco.voco.app.auth.domain.model.TokenEntity;
 import com.voco.voco.app.member.domain.interfaces.MemberQueryRepository;
-import com.voco.voco.app.member.domain.model.Category;
 import com.voco.voco.app.member.domain.model.Level;
 import com.voco.voco.app.member.domain.model.MemberEntity;
 import com.voco.voco.common.enums.ApiErrorType;
@@ -156,7 +153,7 @@ class SignInUseCaseTest {
 
 	private MemberEntity createMember() {
 		MemberEntity member = MemberEntity.create("홍길동", "Hong Gildong", TEST_EMAIL, ENCODED_PASSWORD,
-			Level.BEGINNER, Set.of(Category.DAILY));
+			Level.BEGINNER);
 		try {
 			java.lang.reflect.Field idField = MemberEntity.class.getDeclaredField("id");
 			idField.setAccessible(true);

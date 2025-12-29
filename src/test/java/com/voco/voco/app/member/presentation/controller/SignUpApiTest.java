@@ -4,7 +4,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import java.util.Set;
 import java.util.UUID;
 
 import org.junit.jupiter.api.DisplayName;
@@ -18,7 +17,6 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.voco.voco.app.member.domain.model.Category;
 import com.voco.voco.app.member.domain.model.Level;
 import com.voco.voco.app.member.presentation.controller.dto.in.SignUpRequest;
 
@@ -49,8 +47,7 @@ class SignUpApiTest {
 			"Hong Gildong",
 			uniqueEmail(),
 			"Password1!",
-			Level.BEGINNER,
-			Set.of(Category.DAILY, Category.BUSINESS)
+			Level.BEGINNER
 		);
 
 		// when
@@ -76,8 +73,7 @@ class SignUpApiTest {
 			"Hong Gildong",
 			email,
 			"Password1!",
-			Level.BEGINNER,
-			Set.of(Category.DAILY)
+			Level.BEGINNER
 		);
 
 		// 첫 번째 회원가입 (성공)
@@ -91,8 +87,7 @@ class SignUpApiTest {
 			"Kim Cheolsu",
 			email,
 			"Password1!",
-			Level.INTERMEDIATE,
-			Set.of(Category.BUSINESS)
+			Level.INTERMEDIATE
 		);
 		ResultActions result = mockMvc.perform(post(URL)
 			.contentType(MediaType.APPLICATION_JSON)
@@ -115,8 +110,7 @@ class SignUpApiTest {
 			"Hong Gildong",
 			uniqueEmail(),
 			"short",
-			Level.BEGINNER,
-			Set.of(Category.DAILY)
+			Level.BEGINNER
 		);
 
 		// when
@@ -141,8 +135,7 @@ class SignUpApiTest {
 				"koreanName": "홍길동",
 				"englishName": "Hong Gildong",
 				"password": "Password1!",
-				"level": "BEGINNER",
-				"categories": ["DAILY"]
+				"level": "BEGINNER"
 			}
 			""";
 
@@ -166,8 +159,7 @@ class SignUpApiTest {
 			"Hong Gildong",
 			"invalid-email",
 			"Password1!",
-			Level.BEGINNER,
-			Set.of(Category.DAILY)
+			Level.BEGINNER
 		);
 
 		// when

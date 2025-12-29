@@ -5,12 +5,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.voco.voco.common.model.BaseModel;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
-import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.EnumType;
@@ -18,7 +13,6 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Table;
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -62,14 +56,8 @@ public class MemberEntity extends BaseModel {
 	@Column(name = "user_type", nullable = false)
 	private UserType userType;
 
-	@ElementCollection
-	@Enumerated(EnumType.STRING)
-	@CollectionTable(name = "voco_member_category", joinColumns = @JoinColumn(name = "member_id"))
-	@Column(name = "category")
-	private Set<Category> categories = new HashSet<>();
-
 	private MemberEntity(Provider provider, String providerId, String koreanName, String englishName, String email,
-		String password, Level level, UserType userType, Set<Category> categories) {
+		String password, Level level, UserType userType) {
 		this.provider = provider;
 		this.providerId = providerId;
 		this.koreanName = koreanName;
@@ -78,26 +66,24 @@ public class MemberEntity extends BaseModel {
 		this.password = password;
 		this.level = level;
 		this.userType = userType;
-		this.categories = categories;
 	}
 
 	public static MemberEntity create(String koreanName, String englishName, String email, String password,
-		Level level, Set<Category> categories) {
-		return new MemberEntity(Provider.EMAIL, null, koreanName, englishName, email, password, level, UserType.USER, categories);
+		Level level) {
+		return new MemberEntity(Provider.EMAIL, null, koreanName, englishName, email, password, level, UserType.USER);
 	}
 
 	public static MemberEntity createSocial(Provider provider, String providerId, String koreanName, String englishName,
-		String email, Level level, Set<Category> categories) {
-		return new MemberEntity(provider, providerId, koreanName, englishName, email, null, level, UserType.USER, categories);
+		String email, Level level) {
+		return new MemberEntity(provider, providerId, koreanName, englishName, email, null, level, UserType.USER);
 	}
 
 	public boolean isAdmin() {
 		return this.userType == UserType.ADMIN;
 	}
 
-	public void update(String englishName, Level level, Set<Category> categories) {
+	public void update(String englishName, Level level) {
 		this.englishName = englishName;
 		this.level = level;
-		this.categories = categories;
 	}
 }

@@ -4,7 +4,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import java.util.Set;
 import java.util.UUID;
 
 import org.junit.jupiter.api.DisplayName;
@@ -19,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.voco.voco.app.auth.presentation.controller.dto.in.SignInRequest;
-import com.voco.voco.app.member.domain.model.Category;
 import com.voco.voco.app.member.domain.model.Level;
 import com.voco.voco.app.member.presentation.controller.dto.in.SignUpRequest;
 
@@ -49,8 +47,7 @@ class SignInApiTest {
 			"Hong Gildong",
 			email,
 			password,
-			Level.BEGINNER,
-			Set.of(Category.DAILY)
+			Level.BEGINNER
 		);
 		mockMvc.perform(post(SIGN_UP_URL)
 			.contentType(MediaType.APPLICATION_JSON)

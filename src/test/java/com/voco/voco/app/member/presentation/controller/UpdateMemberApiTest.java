@@ -4,7 +4,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-import java.util.Set;
 import java.util.UUID;
 
 import org.junit.jupiter.api.DisplayName;
@@ -20,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
 import com.voco.voco.app.auth.presentation.controller.dto.in.SignInRequest;
-import com.voco.voco.app.member.domain.model.Category;
 import com.voco.voco.app.member.domain.model.Level;
 import com.voco.voco.app.member.presentation.controller.dto.in.SignUpRequest;
 import com.voco.voco.app.member.presentation.controller.dto.in.UpdateMemberRequest;
@@ -52,8 +50,7 @@ class UpdateMemberApiTest {
 			"Hong Gildong",
 			email,
 			VALID_PASSWORD,
-			Level.BEGINNER,
-			Set.of(Category.DAILY)
+			Level.BEGINNER
 		);
 		mockMvc.perform(post(SIGN_UP_URL)
 			.contentType(MediaType.APPLICATION_JSON)
@@ -79,8 +76,7 @@ class UpdateMemberApiTest {
 
 		UpdateMemberRequest request = new UpdateMemberRequest(
 			"New English Name",
-			Level.INTERMEDIATE,
-			Set.of(Category.BUSINESS, Category.TRAVEL)
+			Level.INTERMEDIATE
 		);
 
 		// when
@@ -102,8 +98,7 @@ class UpdateMemberApiTest {
 		// given
 		UpdateMemberRequest request = new UpdateMemberRequest(
 			"New English Name",
-			Level.INTERMEDIATE,
-			Set.of(Category.BUSINESS)
+			Level.INTERMEDIATE
 		);
 
 		// when
@@ -126,8 +121,7 @@ class UpdateMemberApiTest {
 
 		UpdateMemberRequest request = new UpdateMemberRequest(
 			"",
-			Level.INTERMEDIATE,
-			Set.of(Category.BUSINESS)
+			Level.INTERMEDIATE
 		);
 
 		// when
@@ -135,33 +129,6 @@ class UpdateMemberApiTest {
 			.header("Authorization", "Bearer " + accessToken)
 			.contentType(MediaType.APPLICATION_JSON)
 			.content(objectMapper.writeValueAsString(request)));
-
-		// then
-		result
-			.andDo(print())
-			.andExpect(status().isBadRequest());
-	}
-
-	@Test
-	@DisplayName("카테고리가 비어있으면 수정에 실패한다")
-	void updateMember_EmptyCategories_Fail() throws Exception {
-		// given
-		String email = uniqueEmail();
-		String accessToken = signUpAndSignIn(email);
-
-		String requestJson = """
-			{
-				"englishName": "New English Name",
-				"level": "INTERMEDIATE",
-				"categories": []
-			}
-			""";
-
-		// when
-		ResultActions result = mockMvc.perform(put(MEMBER_URL)
-			.header("Authorization", "Bearer " + accessToken)
-			.contentType(MediaType.APPLICATION_JSON)
-			.content(requestJson));
 
 		// then
 		result
@@ -178,8 +145,7 @@ class UpdateMemberApiTest {
 
 		String requestJson = """
 			{
-				"englishName": "New English Name",
-				"categories": ["BUSINESS"]
+				"englishName": "New English Name"
 			}
 			""";
 

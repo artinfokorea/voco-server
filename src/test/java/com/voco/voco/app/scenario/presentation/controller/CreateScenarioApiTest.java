@@ -5,7 +5,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import java.util.List;
-import java.util.Set;
 import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -22,7 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
 import com.voco.voco.app.auth.presentation.controller.dto.in.SignInRequest;
-import com.voco.voco.app.member.domain.model.Category;
 import com.voco.voco.app.member.presentation.controller.dto.in.SignUpRequest;
 import com.voco.voco.app.scenario.domain.model.Level;
 import com.voco.voco.app.scenario.presentation.controller.dto.in.CreateScenarioRequest;
@@ -59,8 +57,7 @@ class CreateScenarioApiTest {
 			"Hong Gildong",
 			testEmail,
 			VALID_PASSWORD,
-			com.voco.voco.app.member.domain.model.Level.BEGINNER,
-			Set.of(Category.DAILY)
+			com.voco.voco.app.member.domain.model.Level.BEGINNER
 		);
 		mockMvc.perform(post(SIGN_UP_URL)
 			.contentType(MediaType.APPLICATION_JSON)

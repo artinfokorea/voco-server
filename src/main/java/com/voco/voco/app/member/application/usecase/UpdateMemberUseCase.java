@@ -22,6 +22,6 @@ public class UpdateMemberUseCase {
 		MemberEntity member = memberQueryRepository.findById(dto.memberId())
 			.orElseThrow(() -> new CoreException(ApiErrorType.MEMBER_NOT_FOUND));
 
-		member.update(dto.englishName(), dto.level(), dto.categories());
+		member.update(dto.englishName(), dto.level());
 	}
 }

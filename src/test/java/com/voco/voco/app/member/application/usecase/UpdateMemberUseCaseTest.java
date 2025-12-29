@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.*;
 import static org.mockito.BDDMockito.*;
 
 import java.util.Optional;
-import java.util.Set;
 
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
@@ -16,7 +15,6 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 import com.voco.voco.app.member.application.usecase.dto.in.UpdateMemberUseCaseDto;
 import com.voco.voco.app.member.domain.interfaces.MemberQueryRepository;
-import com.voco.voco.app.member.domain.model.Category;
 import com.voco.voco.app.member.domain.model.Level;
 import com.voco.voco.app.member.domain.model.MemberEntity;
 import com.voco.voco.common.enums.ApiErrorType;
@@ -44,8 +42,7 @@ class UpdateMemberUseCaseTest {
 			UpdateMemberUseCaseDto dto = new UpdateMemberUseCaseDto(
 				MEMBER_ID,
 				"New English Name",
-				Level.INTERMEDIATE,
-				Set.of(Category.BUSINESS, Category.TRAVEL)
+				Level.INTERMEDIATE
 			);
 			MemberEntity member = createMember();
 
@@ -57,7 +54,6 @@ class UpdateMemberUseCaseTest {
 			// then
 			assertThat(member.getEnglishName()).isEqualTo("New English Name");
 			assertThat(member.getLevel()).isEqualTo(Level.INTERMEDIATE);
-			assertThat(member.getCategories()).containsExactlyInAnyOrder(Category.BUSINESS, Category.TRAVEL);
 		}
 
 		@Test
@@ -67,8 +63,7 @@ class UpdateMemberUseCaseTest {
 			UpdateMemberUseCaseDto dto = new UpdateMemberUseCaseDto(
 				999L,
 				"New English Name",
-				Level.INTERMEDIATE,
-				Set.of(Category.BUSINESS)
+				Level.INTERMEDIATE
 			);
 
 			given(memberQueryRepository.findById(999L)).willReturn(Optional.empty());
@@ -89,8 +84,7 @@ class UpdateMemberUseCaseTest {
 			"Hong Gildong",
 			"test@example.com",
 			"encodedPassword",
-			Level.BEGINNER,
-			Set.of(Category.DAILY)
+			Level.BEGINNER
 		);
 		try {
 			java.lang.reflect.Field idField = MemberEntity.class.getDeclaredField("id");
