@@ -9,6 +9,7 @@ import com.voco.voco.app.scenario.domain.model.ConversationSlotEntity;
 import com.voco.voco.app.scenario.domain.model.ConversationStateEntity;
 
 public record ScenarioMetadata(
+	Long callId,
 	Long scenarioId,
 	String scenarioTitle,
 	String language,
@@ -33,8 +34,9 @@ public record ScenarioMetadata(
 	) {
 	}
 
-	public static ScenarioMetadata from(ConversationScenarioEntity scenario) {
+	public static ScenarioMetadata from(ConversationScenarioEntity scenario, Long callId) {
 		return new ScenarioMetadata(
+			callId,
 			scenario.getId(),
 			scenario.getName(),
 			"en",

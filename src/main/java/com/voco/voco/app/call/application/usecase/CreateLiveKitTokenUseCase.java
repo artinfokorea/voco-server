@@ -37,11 +37,11 @@ public class CreateLiveKitTokenUseCase {
 		String roomName = generateRoomName(member, scenario);
 		String participantIdentity = String.valueOf(member.getId());
 		String participantName = member.getKoreanName();
-		String metadata = createMetadata(scenario);
 
 		CallEntity call = CallEntity.create(memberId, scenarioId, roomName);
 		Long callId = callCommandRepository.save(call);
 
+		String metadata = createMetadata(scenario, callId);
 		String token = liveKitTokenAdaptor.createToken(roomName, participantIdentity, participantName, metadata);
 		return new LiveKitTokenInfo(token, roomName, callId);
 	}
@@ -55,8 +55,8 @@ public class CreateLiveKitTokenUseCase {
 			shortUuid);
 	}
 
-	private String createMetadata(ConversationScenarioEntity scenario) {
-		ScenarioMetadata metadata = ScenarioMetadata.from(scenario);
+	private String createMetadata(ConversationScenarioEntity scenario, Long callId) {
+		ScenarioMetadata metadata = ScenarioMetadata.from(scenario, callId);
 		try {
 			return objectMapper.writeValueAsString(metadata);
 		} catch (JsonProcessingException e) {
