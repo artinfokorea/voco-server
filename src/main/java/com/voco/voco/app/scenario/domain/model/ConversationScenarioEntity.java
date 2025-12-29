@@ -55,7 +55,7 @@ public class ConversationScenarioEntity extends BaseModel {
 	private String completionRule;
 
 	@JdbcTypeCode(SqlTypes.JSON)
-	@Column(name = "completion_rule_detail", columnDefinition = "jsonb")
+	@Column(name = "completion_rule_detail")
 	private List<String> completionRuleDetail;
 
 	@OneToOne(mappedBy = "scenario", cascade = CascadeType.ALL, fetch = FetchType.LAZY)

@@ -38,7 +38,7 @@ public class BehaviorRulesEntity extends BaseModel {
 	private ConversationScenarioEntity scenario;
 
 	@JdbcTypeCode(SqlTypes.JSON)
-	@Column(name = "rules", nullable = false, columnDefinition = "jsonb")
+	@Column(name = "rules", nullable = false)
 	private List<String> rules;
 
 	private BehaviorRulesEntity(List<String> rules) {

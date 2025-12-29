@@ -41,7 +41,7 @@ public class ScenarioContextEntity extends BaseModel {
 	private String context;
 
 	@JdbcTypeCode(SqlTypes.JSON)
-	@Column(name = "personality", nullable = false, columnDefinition = "jsonb")
+	@Column(name = "personality", nullable = false)
 	private List<String> personality;
 
 	private ScenarioContextEntity(String context, List<String> personality) {

@@ -41,7 +41,7 @@ public class ConversationSlotEntity extends BaseModel {
 	private String slotKey;
 
 	@JdbcTypeCode(SqlTypes.JSON)
-	@Column(name = "allowed_values", nullable = false, columnDefinition = "jsonb")
+	@Column(name = "allowed_values", nullable = false)
 	private List<String> allowedValues;
 
 	private ConversationSlotEntity(String slotKey, List<String> allowedValues) {

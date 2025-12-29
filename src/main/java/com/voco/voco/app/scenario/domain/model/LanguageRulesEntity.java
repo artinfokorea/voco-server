@@ -38,15 +38,15 @@ public class LanguageRulesEntity extends BaseModel {
 	private ConversationScenarioEntity scenario;
 
 	@JdbcTypeCode(SqlTypes.JSON)
-	@Column(name = "vocabulary_rules", nullable = false, columnDefinition = "jsonb")
+	@Column(name = "vocabulary_rules", nullable = false)
 	private List<String> vocabularyRules;
 
 	@JdbcTypeCode(SqlTypes.JSON)
-	@Column(name = "sentence_rules", nullable = false, columnDefinition = "jsonb")
+	@Column(name = "sentence_rules", nullable = false)
 	private List<String> sentenceRules;
 
 	@JdbcTypeCode(SqlTypes.JSON)
-	@Column(name = "output_constraints", nullable = false, columnDefinition = "jsonb")
+	@Column(name = "output_constraints", nullable = false)
 	private List<String> outputConstraints;
 
 	private LanguageRulesEntity(List<String> vocabularyRules, List<String> sentenceRules,
