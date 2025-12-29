@@ -78,6 +78,11 @@ public class MemberEntity extends BaseModel {
 		return new MemberEntity(provider, providerId, koreanName, englishName, email, null, level, UserType.USER);
 	}
 
+	public static MemberEntity createAdmin(String koreanName, String englishName, String email, String password,
+		Level level) {
+		return new MemberEntity(Provider.EMAIL, null, koreanName, englishName, email, password, level, UserType.ADMIN);
+	}
+
 	public boolean isAdmin() {
 		return this.userType == UserType.ADMIN;
 	}

@@ -14,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,9 +22,11 @@ import org.springframework.transaction.annotation.Transactional;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.jayway.jsonpath.JsonPath;
 import com.voco.voco.app.auth.presentation.controller.dto.in.SignInRequest;
-import com.voco.voco.app.member.presentation.controller.dto.in.SignUpRequest;
+import com.voco.voco.app.member.domain.model.MemberEntity;
 import com.voco.voco.app.scenario.domain.model.Level;
 import com.voco.voco.app.scenario.presentation.controller.dto.in.CreateScenarioRequest;
+
+import jakarta.persistence.EntityManager;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -37,8 +40,13 @@ class CreateScenarioApiTest {
 	@Autowired
 	private ObjectMapper objectMapper;
 
+	@Autowired
+	private EntityManager entityManager;
+
+	@Autowired
+	private PasswordEncoder passwordEncoder;
+
 	private static final String SCENARIO_URL = "/api/v1/scenarios";
-	private static final String SIGN_UP_URL = "/api/v1/members/sign-up";
 	private static final String SIGN_IN_URL = "/api/v1/auth/sign-in";
 	private static final String VALID_PASSWORD = "Password1!";
 
@@ -52,16 +60,16 @@ class CreateScenarioApiTest {
 	void setUp() throws Exception {
 		String testEmail = uniqueEmail();
 
-		SignUpRequest signUpRequest = new SignUpRequest(
-			"홍길동",
-			"Hong Gildong",
+		// Admin 유저 생성
+		MemberEntity adminMember = MemberEntity.createAdmin(
+			"관리자",
+			"Admin",
 			testEmail,
-			VALID_PASSWORD,
+			passwordEncoder.encode(VALID_PASSWORD),
 			com.voco.voco.app.member.domain.model.Level.BEGINNER
 		);
-		mockMvc.perform(post(SIGN_UP_URL)
-			.contentType(MediaType.APPLICATION_JSON)
-			.content(objectMapper.writeValueAsString(signUpRequest)));
+		entityManager.persist(adminMember);
+		entityManager.flush();
 
 		SignInRequest signInRequest = new SignInRequest(testEmail, VALID_PASSWORD);
 		String signInResponse = mockMvc.perform(post(SIGN_IN_URL)

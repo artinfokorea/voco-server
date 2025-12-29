@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.voco.voco.app.scenario.application.usecase.CreateScenarioUseCase;
 import com.voco.voco.app.scenario.presentation.controller.dto.in.CreateScenarioRequest;
+import com.voco.voco.common.annotation.AdminId;
 import com.voco.voco.common.dto.response.ApiResponse;
 
 import io.swagger.v3.oas.annotations.Operation;
@@ -24,9 +25,12 @@ public class ScenarioController {
 
 	private final CreateScenarioUseCase createScenarioUseCase;
 
-	@Operation(summary = "시나리오 생성", description = "대화 시나리오를 생성합니다.")
+	@Operation(summary = "시나리오 생성", description = "대화 시나리오를 생성합니다. (관리자 전용)")
 	@PostMapping
-	public ApiResponse<Long> createScenario(@Valid @RequestBody CreateScenarioRequest request) {
+	public ApiResponse<Long> createScenario(
+		@AdminId Long adminId,
+		@Valid @RequestBody CreateScenarioRequest request
+	) {
 		Long scenarioId = createScenarioUseCase.execute(request.toUseCaseDto());
 		return ApiResponse.success(scenarioId);
 	}
