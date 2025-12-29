@@ -21,6 +21,7 @@ public enum ApiErrorType {
 	// MEMBER
 	MEMBER_NOT_FOUND(ApiErrorCode.NOT_FOUND, "MEMBER-1", "해당 유저가 존재하지 않습니다.",
 		LogLevel.WARN),
+	ADMIN_ONLY(ApiErrorCode.FORBIDDEN, "MEMBER-8", "관리자만 접근할 수 있습니다.", LogLevel.WARN),
 	INVALID_PASSWORD(ApiErrorCode.CLIENT_ERROR, "MEMBER-2", "비밀번호는 최소 8자 이상이며, 영문자, 숫자, 특수문자를 각각 하나 이상 포함해야 합니다.",
 		LogLevel.WARN),
 	INVALID_PASSWORD_MISMATCH(ApiErrorCode.CLIENT_ERROR, "MEMBER-3", "비밀번호가 일치하지 않습니다.", LogLevel.WARN),

@@ -7,6 +7,7 @@ import org.springframework.web.method.support.HandlerMethodArgumentResolver;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
+import com.voco.voco.common.annotation.AdminIdArgumentResolver;
 import com.voco.voco.common.annotation.MemberIdArgumentResolver;
 
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 public class WebMvcConfig implements WebMvcConfigurer {
 
 	private final MemberIdArgumentResolver memberIdArgumentResolver;
+	private final AdminIdArgumentResolver adminIdArgumentResolver;
 
 	@Override
 	public void addCorsMappings(CorsRegistry registry) {
@@ -29,5 +31,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
 	@Override
 	public void addArgumentResolvers(List<HandlerMethodArgumentResolver> resolvers) {
 		resolvers.add(memberIdArgumentResolver);
+		resolvers.add(adminIdArgumentResolver);
 	}
 }
