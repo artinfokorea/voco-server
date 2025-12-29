@@ -1,5 +1,8 @@
 package com.voco.voco.app.call.domain.model;
 
+import java.util.List;
+import java.util.Map;
+
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
@@ -7,6 +10,7 @@ import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 import com.voco.voco.common.model.BaseModel;
 
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.GeneratedValue;
@@ -29,22 +33,79 @@ public class CallAnalysisEntity extends BaseModel {
 	private Long id;
 
 	@JdbcTypeCode(SqlTypes.JSON)
-	@Column(name = "content", nullable = false)
-	private String content;
+	@Column(name = "task_completion", nullable = false)
+	private Map<String, Object> taskCompletion;
 
-	@Column(name = "score", nullable = false)
-	private Integer score;
+	@Column(name = "total_user_utterances", nullable = false)
+	private Integer totalUserUtterances;
 
-	@Column(name = "summary", nullable = false, columnDefinition = "TEXT")
-	private String summary;
+	@Column(name = "correct_utterances", nullable = false)
+	private Integer correctUtterances;
 
-	private CallAnalysisEntity(String content, Integer score, String summary) {
-		this.content = content;
-		this.score = score;
-		this.summary = summary;
+	@JdbcTypeCode(SqlTypes.JSON)
+	@Column(name = "utterance_analyses", nullable = false)
+	private List<Map<String, Object>> utteranceAnalyses;
+
+	@JdbcTypeCode(SqlTypes.JSON)
+	@Column(name = "errors")
+	private List<Map<String, Object>> errors;
+
+	@JdbcTypeCode(SqlTypes.JSON)
+	@Column(name = "error_summary", nullable = false)
+	private Map<String, Object> errorSummary;
+
+	@Embedded
+	private ScoringEmbeddable scoring;
+
+	@Embedded
+	private FeedbackEmbeddable feedback;
+
+	@Column(name = "brief_description", nullable = false, columnDefinition = "TEXT")
+	private String briefDescription;
+
+	private CallAnalysisEntity(
+		Map<String, Object> taskCompletion,
+		Integer totalUserUtterances,
+		Integer correctUtterances,
+		List<Map<String, Object>> utteranceAnalyses,
+		List<Map<String, Object>> errors,
+		Map<String, Object> errorSummary,
+		ScoringEmbeddable scoring,
+		FeedbackEmbeddable feedback,
+		String briefDescription
+	) {
+		this.taskCompletion = taskCompletion;
+		this.totalUserUtterances = totalUserUtterances;
+		this.correctUtterances = correctUtterances;
+		this.utteranceAnalyses = utteranceAnalyses;
+		this.errors = errors;
+		this.errorSummary = errorSummary;
+		this.scoring = scoring;
+		this.feedback = feedback;
+		this.briefDescription = briefDescription;
 	}
 
-	public static CallAnalysisEntity create(String content, Integer score, String summary) {
-		return new CallAnalysisEntity(content, score, summary);
+	public static CallAnalysisEntity create(
+		Map<String, Object> taskCompletion,
+		Integer totalUserUtterances,
+		Integer correctUtterances,
+		List<Map<String, Object>> utteranceAnalyses,
+		List<Map<String, Object>> errors,
+		Map<String, Object> errorSummary,
+		ScoringEmbeddable scoring,
+		FeedbackEmbeddable feedback,
+		String briefDescription
+	) {
+		return new CallAnalysisEntity(
+			taskCompletion,
+			totalUserUtterances,
+			correctUtterances,
+			utteranceAnalyses,
+			errors,
+			errorSummary,
+			scoring,
+			feedback,
+			briefDescription
+		);
 	}
 }
