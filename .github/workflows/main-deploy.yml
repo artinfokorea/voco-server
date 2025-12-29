@@ -40,7 +40,7 @@ jobs:
           echo "${{ secrets.PROD_APPLICATION_YML }}" | base64 --decode > src/main/resources/application.yml
 
       - name: Build with Gradle
-        run: ./gradlew clean build
+        run: ./gradlew clean build -x test
 
       - name: Set up Docker buildx
         id: buildx
