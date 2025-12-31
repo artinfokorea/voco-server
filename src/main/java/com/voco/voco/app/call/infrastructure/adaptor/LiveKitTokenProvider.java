@@ -8,6 +8,8 @@ import com.voco.voco.common.config.LiveKitProperties;
 import io.livekit.server.AccessToken;
 import io.livekit.server.RoomJoin;
 import io.livekit.server.RoomName;
+import livekit.LivekitAgentDispatch.RoomAgentDispatch;
+import livekit.LivekitRoom.RoomConfiguration;
 import lombok.RequiredArgsConstructor;
 
 @Component
@@ -15,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 public class LiveKitTokenProvider implements LiveKitTokenAdaptor {
 
 	private static final long TOKEN_TTL_SECONDS = 3600L;
+	private static final String AGENT_NAME = "voco-agent";
 
 	private final LiveKitProperties liveKitProperties;
 
@@ -27,9 +30,19 @@ public class LiveKitTokenProvider implements LiveKitTokenAdaptor {
 
 		token.setIdentity(participantIdentity);
 		token.setName(participantName);
-		token.setMetadata(metadata);
 		token.setTtl(TOKEN_TTL_SECONDS);
 		token.addGrants(new RoomJoin(true), new RoomName(roomName));
+
+		RoomAgentDispatch agentDispatch = RoomAgentDispatch.newBuilder()
+			.setAgentName(AGENT_NAME)
+			.setMetadata(metadata)
+			.build();
+
+		RoomConfiguration roomConfig = RoomConfiguration.newBuilder()
+			.addAgents(agentDispatch)
+			.build();
+
+		token.setRoomConfiguration(roomConfig);
 
 		return token.toJwt();
 	}

@@ -4,10 +4,13 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import com.fasterxml.jackson.databind.annotation.JsonNaming;
 import com.voco.voco.app.scenario.domain.model.ConversationScenarioEntity;
 import com.voco.voco.app.scenario.domain.model.ConversationSlotEntity;
 import com.voco.voco.app.scenario.domain.model.ConversationStateEntity;
 
+@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public record ScenarioMetadata(
 	Long callId,
 	Long scenarioId,
@@ -28,6 +31,7 @@ public record ScenarioMetadata(
 	List<SlotInfo> slots,
 	String completionRule
 ) {
+	@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 	public record SlotInfo(
 		String name,
 		String description
