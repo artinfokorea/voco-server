@@ -68,8 +68,8 @@ class SignInUseCaseTest {
 
 			given(memberQueryRepository.findByEmail(dto.email())).willReturn(Optional.of(member));
 			given(passwordAdaptor.matches(dto.password(), member.getPassword())).willReturn(true);
-			given(jwtAdaptor.createAccessToken(member.getId())).willReturn(ACCESS_TOKEN);
-			given(jwtAdaptor.createRefreshToken(member.getId())).willReturn(REFRESH_TOKEN);
+			given(jwtAdaptor.createAccessToken(eq(member.getId()), anyLong())).willReturn(ACCESS_TOKEN);
+			given(jwtAdaptor.createRefreshToken(eq(member.getId()), anyLong())).willReturn(REFRESH_TOKEN);
 			given(tokenQueryRepository.findByMemberId(member.getId())).willReturn(Optional.empty());
 
 			// when
@@ -91,8 +91,8 @@ class SignInUseCaseTest {
 
 			given(memberQueryRepository.findByEmail(dto.email())).willReturn(Optional.of(member));
 			given(passwordAdaptor.matches(dto.password(), member.getPassword())).willReturn(true);
-			given(jwtAdaptor.createAccessToken(member.getId())).willReturn(ACCESS_TOKEN);
-			given(jwtAdaptor.createRefreshToken(member.getId())).willReturn(REFRESH_TOKEN);
+			given(jwtAdaptor.createAccessToken(eq(member.getId()), anyLong())).willReturn(ACCESS_TOKEN);
+			given(jwtAdaptor.createRefreshToken(eq(member.getId()), anyLong())).willReturn(REFRESH_TOKEN);
 			given(tokenQueryRepository.findByMemberId(member.getId())).willReturn(Optional.of(existingToken));
 
 			// when

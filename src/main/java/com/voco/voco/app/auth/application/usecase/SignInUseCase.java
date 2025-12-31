@@ -24,7 +24,7 @@ import lombok.RequiredArgsConstructor;
 @Transactional
 public class SignInUseCase {
 
-	private static final long ACCESS_TOKEN_VALIDITY_MINUTES = 30;
+	private static final long ACCESS_TOKEN_VALIDITY_MINUTES = 1;
 	private static final long REFRESH_TOKEN_VALIDITY_DAYS = 180;
 
 	private final MemberQueryRepository memberQueryRepository;
@@ -41,8 +41,8 @@ public class SignInUseCase {
 			throw new CoreException(ApiErrorType.INVALID_PASSWORD_MISMATCH);
 		}
 
-		String accessToken = jwtAdaptor.createAccessToken(member.getId());
-		String refreshToken = jwtAdaptor.createRefreshToken(member.getId());
+		String accessToken = jwtAdaptor.createAccessToken(member.getId(), ACCESS_TOKEN_VALIDITY_MINUTES);
+		String refreshToken = jwtAdaptor.createRefreshToken(member.getId(), REFRESH_TOKEN_VALIDITY_DAYS);
 
 		LocalDateTime now = LocalDateTime.now();
 		LocalDateTime accessTokenExpiredAt = now.plusMinutes(ACCESS_TOKEN_VALIDITY_MINUTES);

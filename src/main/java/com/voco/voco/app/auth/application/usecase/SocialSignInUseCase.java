@@ -43,8 +43,8 @@ public class SocialSignInUseCase {
 		MemberEntity member = memberQueryRepository.findByProviderAndProviderId(dto.provider(), socialUserInfo.providerId())
 			.orElseThrow(() -> new CoreException(ApiErrorType.MEMBER_NOT_FOUND));
 
-		String accessToken = jwtAdaptor.createAccessToken(member.getId());
-		String refreshToken = jwtAdaptor.createRefreshToken(member.getId());
+		String accessToken = jwtAdaptor.createAccessToken(member.getId(), ACCESS_TOKEN_VALIDITY_MINUTES);
+		String refreshToken = jwtAdaptor.createRefreshToken(member.getId(), REFRESH_TOKEN_VALIDITY_DAYS);
 
 		LocalDateTime now = LocalDateTime.now();
 		LocalDateTime accessTokenExpiredAt = now.plusMinutes(ACCESS_TOKEN_VALIDITY_MINUTES);

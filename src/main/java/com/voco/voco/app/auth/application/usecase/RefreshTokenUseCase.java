@@ -45,8 +45,8 @@ public class RefreshTokenUseCase {
 			throw new CoreException(ApiErrorType.TOKEN_EXPIRED);
 		}
 
-		String newAccessToken = jwtAdaptor.createAccessToken(accessTokenMemberId);
-		String newRefreshToken = jwtAdaptor.createRefreshToken(accessTokenMemberId);
+		String newAccessToken = jwtAdaptor.createAccessToken(accessTokenMemberId, ACCESS_TOKEN_VALIDITY_MINUTES);
+		String newRefreshToken = jwtAdaptor.createRefreshToken(accessTokenMemberId, REFRESH_TOKEN_VALIDITY_DAYS);
 
 		LocalDateTime now = LocalDateTime.now();
 		LocalDateTime accessTokenExpiredAt = now.plusMinutes(ACCESS_TOKEN_VALIDITY_MINUTES);

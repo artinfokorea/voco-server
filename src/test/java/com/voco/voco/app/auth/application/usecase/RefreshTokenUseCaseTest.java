@@ -56,8 +56,8 @@ class RefreshTokenUseCaseTest {
 			given(tokenQueryRepository.findByMemberId(MEMBER_ID)).willReturn(Optional.of(token));
 			given(token.getRefreshToken()).willReturn(OLD_REFRESH_TOKEN);
 			given(token.isRefreshTokenExpired()).willReturn(false);
-			given(jwtAdaptor.createAccessToken(MEMBER_ID)).willReturn(NEW_ACCESS_TOKEN);
-			given(jwtAdaptor.createRefreshToken(MEMBER_ID)).willReturn(NEW_REFRESH_TOKEN);
+			given(jwtAdaptor.createAccessToken(eq(MEMBER_ID), anyLong())).willReturn(NEW_ACCESS_TOKEN);
+			given(jwtAdaptor.createRefreshToken(eq(MEMBER_ID), anyLong())).willReturn(NEW_REFRESH_TOKEN);
 
 			// when
 			TokenInfo result = refreshTokenUseCase.execute(dto);

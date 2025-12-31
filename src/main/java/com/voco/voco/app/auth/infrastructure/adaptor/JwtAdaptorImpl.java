@@ -23,9 +23,6 @@ import io.jsonwebtoken.security.Keys;
 @Component
 public class JwtAdaptorImpl implements JwtAdaptor {
 
-	private static final long ACCESS_TOKEN_VALIDITY = 1000L * 60 * 30; // 30분
-	private static final long REFRESH_TOKEN_VALIDITY = 1000L * 60 * 60 * 24 * 7; // 7일
-
 	private final SecretKey secretKey;
 
 	public JwtAdaptorImpl(@Value("${jwt.secret-key}") String secretKey) {
@@ -33,13 +30,13 @@ public class JwtAdaptorImpl implements JwtAdaptor {
 	}
 
 	@Override
-	public String createAccessToken(Long memberId) {
-		return createToken(memberId, ACCESS_TOKEN_VALIDITY);
+	public String createAccessToken(Long memberId, long validityMinutes) {
+		return createToken(memberId, 1000L * 60 * validityMinutes);
 	}
 
 	@Override
-	public String createRefreshToken(Long memberId) {
-		return createToken(memberId, REFRESH_TOKEN_VALIDITY);
+	public String createRefreshToken(Long memberId, long validityDays) {
+		return createToken(memberId, 1000L * 60 * 60 * 24 * validityDays);
 	}
 
 	private String createToken(Long memberId, long validity) {
