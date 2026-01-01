@@ -13,6 +13,7 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import com.voco.voco.app.notification.domain.interfaces.NotificationScheduleCommandRepository;
 import com.voco.voco.app.scenario.domain.interfaces.ScenarioQueryRepository;
 import com.voco.voco.app.scenario.domain.model.ConversationScenarioEntity;
 import com.voco.voco.app.scenario.domain.model.Level;
@@ -27,6 +28,9 @@ class DeleteScenarioUseCaseTest {
 
 	@Mock
 	private ScenarioQueryRepository scenarioQueryRepository;
+
+	@Mock
+	private NotificationScheduleCommandRepository notificationScheduleCommandRepository;
 
 	private static final Long SCENARIO_ID = 1L;
 

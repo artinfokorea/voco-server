@@ -17,4 +17,9 @@ public class NotificationScheduleCommandRepositoryImpl implements NotificationSc
 	public NotificationScheduleEntity save(NotificationScheduleEntity notificationSchedule) {
 		return notificationScheduleJpaRepository.save(notificationSchedule);
 	}
+
+	@Override
+	public void clearScenarioIdByScenarioId(Long scenarioId) {
+		notificationScheduleJpaRepository.clearScenarioIdByScenarioId(scenarioId);
+	}
 }
