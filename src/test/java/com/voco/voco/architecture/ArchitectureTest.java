@@ -88,7 +88,7 @@ class ArchitectureTest {
 
 				.ignoreDependency(
 					resideInAPackage("..presentation.."),
-					resideInAPackage("..domain.model..").and(DescribedPredicate.describe("is enum", JavaClass::isEnum))
+					resideInAPackage("..domain..").and(DescribedPredicate.describe("is enum", JavaClass::isEnum))
 				)
 
 				.check(classes);

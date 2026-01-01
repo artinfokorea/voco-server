@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.voco.voco.app.auth.application.usecase.AdminSignInUseCase;
 import com.voco.voco.app.auth.application.usecase.RefreshTokenUseCase;
 import com.voco.voco.app.auth.application.usecase.SignInUseCase;
 import com.voco.voco.app.auth.application.usecase.SocialSignInUseCase;
@@ -27,6 +28,7 @@ import lombok.RequiredArgsConstructor;
 public class AuthController {
 
 	private final SignInUseCase signInUseCase;
+	private final AdminSignInUseCase adminSignInUseCase;
 	private final SocialSignInUseCase socialSignInUseCase;
 	private final RefreshTokenUseCase refreshTokenUseCase;
 
@@ -34,6 +36,13 @@ public class AuthController {
 	@PostMapping("/sign-in")
 	public ApiResponse<TokenResponse> signIn(@Valid @RequestBody SignInRequest request) {
 		TokenInfo tokenInfo = signInUseCase.execute(request.toUseCaseDto());
+		return ApiResponse.success(TokenResponse.from(tokenInfo));
+	}
+
+	@Operation(summary = "관리자 로그인", description = "관리자 계정으로 로그인합니다.")
+	@PostMapping("/admin/sign-in")
+	public ApiResponse<TokenResponse> adminSignIn(@Valid @RequestBody SignInRequest request) {
+		TokenInfo tokenInfo = adminSignInUseCase.execute(request.toUseCaseDto());
 		return ApiResponse.success(TokenResponse.from(tokenInfo));
 	}
 

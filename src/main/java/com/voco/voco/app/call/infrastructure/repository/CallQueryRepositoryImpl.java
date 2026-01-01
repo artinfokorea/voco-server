@@ -9,8 +9,8 @@ import org.springframework.stereotype.Repository;
 
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import com.voco.voco.app.call.application.usecase.dto.out.CallHistoryInfo;
 import com.voco.voco.app.call.domain.interfaces.CallQueryRepository;
+import com.voco.voco.app.call.domain.interfaces.dto.out.CallHistoryDomainDto;
 import com.voco.voco.app.call.domain.model.CallEntity;
 import com.voco.voco.app.call.domain.model.QCallAnalysisEntity;
 import com.voco.voco.app.call.domain.model.QCallEntity;
@@ -38,10 +38,10 @@ public class CallQueryRepositoryImpl implements CallQueryRepository {
 	}
 
 	@Override
-	public Page<CallHistoryInfo> findCallHistoryByMemberId(Long memberId, Pageable pageable) {
-		List<CallHistoryInfo> content = queryFactory
+	public Page<CallHistoryDomainDto> findCallHistoryByMemberId(Long memberId, Pageable pageable) {
+		List<CallHistoryDomainDto> content = queryFactory
 			.select(Projections.constructor(
-				CallHistoryInfo.class,
+				CallHistoryDomainDto.class,
 				call.id,
 				call.createdAt,
 				scenario.name,

@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.voco.voco.app.call.application.usecase.dto.out.CallHistoryInfo;
 import com.voco.voco.app.call.domain.interfaces.CallQueryRepository;
+import com.voco.voco.app.call.domain.interfaces.dto.out.CallHistoryDomainDto;
 
 import lombok.RequiredArgsConstructor;
 
@@ -21,6 +22,7 @@ public class GetCallsUseCase {
 	@Transactional(readOnly = true)
 	public Page<CallHistoryInfo> execute(Long memberId, int page, int size) {
 		Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.DESC, "createdAt"));
-		return callQueryRepository.findCallHistoryByMemberId(memberId, pageable);
+		Page<CallHistoryDomainDto> domainPage = callQueryRepository.findCallHistoryByMemberId(memberId, pageable);
+		return domainPage.map(CallHistoryInfo::from);
 	}
 }
