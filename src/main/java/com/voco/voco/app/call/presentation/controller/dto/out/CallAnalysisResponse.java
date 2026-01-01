@@ -1,9 +1,9 @@
 package com.voco.voco.app.call.presentation.controller.dto.out;
 
 import java.util.List;
-import java.util.Map;
 
 import com.voco.voco.app.call.application.usecase.dto.out.CallAnalysisInfo;
+import com.voco.voco.app.call.domain.enums.CallAnalysisGrade;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 
@@ -12,85 +12,97 @@ public record CallAnalysisResponse(
 	@Schema(description = "분석 결과 ID")
 	Long id,
 
-	@Schema(description = "과제 완료 분석 (JSON)")
-	Map<String, Object> taskCompletion,
+	@Schema(description = "등급")
+	CallAnalysisGrade grade,
 
-	@Schema(description = "총 사용자 발화 수")
-	Integer totalUserUtterances,
+	@Schema(description = "종합 점수")
+	Integer overallScore,
 
-	@Schema(description = "정확한 발화 수")
-	Integer correctUtterances,
+	@Schema(description = "과제 완료 점수")
+	Integer taskCompletionScore,
 
-	@Schema(description = "발화별 분석 목록")
-	List<Map<String, Object>> utteranceAnalyses,
+	@Schema(description = "과제 완료 요약")
+	String taskCompletionSummary,
 
-	@Schema(description = "오류 목록")
-	List<Map<String, Object>> errors,
+	@Schema(description = "언어 정확도 점수")
+	Integer languageAccuracyScore,
 
-	@Schema(description = "오류 요약")
-	Map<String, Object> errorSummary,
+	@Schema(description = "언어 정확도 요약")
+	String languageAccuracySummary,
 
-	@Schema(description = "채점 정보")
-	ScoringResponse scoring,
+	@Schema(description = "대화 내역")
+	List<ConversationResponse> conversation,
 
-	@Schema(description = "피드백 정보")
-	FeedbackResponse feedback,
-
-	@Schema(description = "간략 설명")
-	String briefDescription
+	@Schema(description = "피드백")
+	FeedbackResponse feedback
 ) {
-	@Schema(description = "채점 정보")
-	public record ScoringResponse(
-		@Schema(description = "기본 점수") Integer baseScore,
-		@Schema(description = "총 감점") Integer totalDeduction,
-		@Schema(description = "치명적 오류 감점") Integer criticalDeduction,
-		@Schema(description = "주요 오류 감점") Integer majorDeduction,
-		@Schema(description = "경미한 오류 감점") Integer minorDeduction,
-		@Schema(description = "레벨 조정") Integer levelAdjustment,
-		@Schema(description = "최종 점수") Integer finalScore,
-		@Schema(description = "등급") String rating
+	@Schema(description = "대화 항목")
+	public record ConversationResponse(
+		@Schema(description = "역할") String role,
+		@Schema(description = "내용") String content,
+		@Schema(description = "오류 정보") ConversationErrorResponse error
+	) {
+	}
+
+	@Schema(description = "대화 오류 정보")
+	public record ConversationErrorResponse(
+		@Schema(description = "오류 유형") String errorType,
+		@Schema(description = "오류 세부 유형") String errorSubtype,
+		@Schema(description = "오류 부분") String errorSegment,
+		@Schema(description = "수정안") String correction,
+		@Schema(description = "설명") String explanation
 	) {
 	}
 
 	@Schema(description = "피드백 정보")
 	public record FeedbackResponse(
-		@Schema(description = "강점 목록") List<String> strengths,
-		@Schema(description = "개선점 목록") List<String> improvements,
-		@Schema(description = "집중 영역 목록") List<String> focusAreas,
-		@Schema(description = "팁 목록") List<String> tips
+		@Schema(description = "강점") List<String> strengths,
+		@Schema(description = "개선점") List<String> improvements,
+		@Schema(description = "집중 영역") List<String> focusAreas,
+		@Schema(description = "팁") List<String> tips
 	) {
 	}
 
 	public static CallAnalysisResponse from(CallAnalysisInfo info) {
+		List<ConversationResponse> conversationResponses = null;
+		if (info.conversation() != null) {
+			conversationResponses = info.conversation().stream()
+				.map(c -> new ConversationResponse(
+					c.role(),
+					c.content(),
+					c.error() != null
+						? new ConversationErrorResponse(
+						c.error().errorType(),
+						c.error().errorSubtype(),
+						c.error().errorSegment(),
+						c.error().correction(),
+						c.error().explanation()
+					)
+						: null
+				))
+				.toList();
+		}
+
+		FeedbackResponse feedbackResponse = null;
+		if (info.feedback() != null) {
+			feedbackResponse = new FeedbackResponse(
+				info.feedback().strengths(),
+				info.feedback().improvements(),
+				info.feedback().focusAreas(),
+				info.feedback().tips()
+			);
+		}
+
 		return new CallAnalysisResponse(
 			info.id(),
-			info.taskCompletion(),
-			info.totalUserUtterances(),
-			info.correctUtterances(),
-			info.utteranceAnalyses(),
-			info.errors(),
-			info.errorSummary(),
-			info.scoring() != null
-				? new ScoringResponse(
-					info.scoring().baseScore(),
-					info.scoring().totalDeduction(),
-					info.scoring().criticalDeduction(),
-					info.scoring().majorDeduction(),
-					info.scoring().minorDeduction(),
-					info.scoring().levelAdjustment(),
-					info.scoring().finalScore(),
-					info.scoring().rating()
-				)
-				: null,
-			info.feedback() != null
-				? new FeedbackResponse(
-					info.feedback().strengths(),
-					info.feedback().improvements(),
-					info.feedback().focusAreas(),
-					info.feedback().tips()
-				)
-				: null,
-			info.briefDescription()
+			info.grade(),
+			info.overallScore(),
+			info.taskCompletionScore(),
+			info.taskCompletionSummary(),
+			info.languageAccuracyScore(),
+			info.languageAccuracySummary(),
+			conversationResponses,
+			feedbackResponse
 		);
 	}
 }

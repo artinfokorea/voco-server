@@ -5,7 +5,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import java.util.List;
-import java.util.Map;
 import java.util.UUID;
 
 import org.junit.jupiter.api.BeforeEach;
@@ -89,34 +88,67 @@ class CreateCallAnalysisApiTest {
 	}
 
 	private CreateCallAnalysisRequest createValidRequest() {
-		return new CreateCallAnalysisRequest(
-			Map.of(
-				"slot_analysis", Map.of("total_slots", 3, "filled_slots", 3),
-				"summary", Map.of("overall_completion_score", 100, "status", "completed")
-			),
-			new CreateCallAnalysisRequest.LanguageAccuracyRequest(
-				4,
-				3,
-				List.of(
-					Map.of("turn", 2, "original_utterance", "I wanting coffee.", "is_correct", false),
-					Map.of("turn", 4, "original_utterance", "Medium, please.", "is_correct", true)
-				),
-				List.of(
-					Map.of("turn", 2, "error_type", "grammar", "severity", "major")
-				),
-				Map.of("total_errors", 1, "by_type", Map.of("grammar", 1)),
-				new CreateCallAnalysisRequest.ScoringRequest(
-					100, 5, 0, 5, 0, 10, 100, "excellent"
-				),
-				new CreateCallAnalysisRequest.FeedbackRequest(
-					List.of("대부분의 문장을 정확하게 표현함"),
-					List.of("동사 형태 사용에 주의 필요"),
-					List.of("현재형 vs 현재진행형 구분"),
-					List.of("상태 동사는 -ing 형태를 쓰지 않습니다")
-				),
-				"4개의 발화 중 1개의 문법 오류가 발견되었습니다."
+		List<CreateCallAnalysisRequest.ConversationRequest> conversation = List.of(
+			new CreateCallAnalysisRequest.ConversationRequest("assistant", "Welcome! What would you like to order?"),
+			new CreateCallAnalysisRequest.ConversationRequest("user", "I wanting coffee."),
+			new CreateCallAnalysisRequest.ConversationRequest("assistant", "What size would you like?"),
+			new CreateCallAnalysisRequest.ConversationRequest("user", "Medium, please.")
+		);
+
+		CreateCallAnalysisRequest.TaskSummaryRequest taskSummary = new CreateCallAnalysisRequest.TaskSummaryRequest(
+			100,
+			"completed",
+			"시나리오가 완벽하게 완료되었습니다."
+		);
+
+		CreateCallAnalysisRequest.TaskCompletionRequest taskCompletion = new CreateCallAnalysisRequest.TaskCompletionRequest(
+			taskSummary,
+			null,
+			null,
+			null,
+			null
+		);
+
+		List<CreateCallAnalysisRequest.ErrorRequest> errors = List.of(
+			new CreateCallAnalysisRequest.ErrorRequest(
+				2,
+				"grammar",
+				"verb_form",
+				"wanting",
+				"want",
+				"현재 진행형 대신 단순 현재형을 사용해야 합니다.",
+				"major",
+				"I wanting coffee."
 			)
 		);
+
+		CreateCallAnalysisRequest.ScoringRequest scoring = new CreateCallAnalysisRequest.ScoringRequest(
+			100,
+			"excellent",
+			100,
+			5,
+			10
+		);
+
+		CreateCallAnalysisRequest.FeedbackRequest feedback = new CreateCallAnalysisRequest.FeedbackRequest(
+			List.of("대부분의 문장을 정확하게 표현함"),
+			List.of("동사 형태 사용에 주의 필요"),
+			List.of("현재형 vs 현재진행형 구분"),
+			List.of("상태 동사는 -ing 형태를 쓰지 않습니다")
+		);
+
+		CreateCallAnalysisRequest.LanguageAccuracyRequest languageAccuracy = new CreateCallAnalysisRequest.LanguageAccuracyRequest(
+			scoring,
+			feedback,
+			"4개의 발화 중 1개의 문법 오류가 발견되었습니다.",
+			errors,
+			4,
+			3,
+			null,
+			null
+		);
+
+		return new CreateCallAnalysisRequest(conversation, taskCompletion, languageAccuracy);
 	}
 
 	private String getUrl(Long callId) {
@@ -161,6 +193,38 @@ class CreateCallAnalysisApiTest {
 					.content(objectMapper.writeValueAsString(request)))
 				.andDo(print())
 				.andExpect(status().isNotFound());
+		}
+
+		@Test
+		@DisplayName("필수 필드가 누락되면 400을 반환한다")
+		void createCallAnalysis_ValidationFailed() throws Exception {
+			// given - taskCompletion.summary가 null인 경우
+			List<CreateCallAnalysisRequest.ConversationRequest> conversation = List.of(
+				new CreateCallAnalysisRequest.ConversationRequest("assistant", "Hello")
+			);
+
+			CreateCallAnalysisRequest.TaskCompletionRequest taskCompletion = new CreateCallAnalysisRequest.TaskCompletionRequest(
+				null, null, null, null, null
+			);
+
+			CreateCallAnalysisRequest.LanguageAccuracyRequest languageAccuracy = new CreateCallAnalysisRequest.LanguageAccuracyRequest(
+				new CreateCallAnalysisRequest.ScoringRequest(100, null, null, null, null),
+				new CreateCallAnalysisRequest.FeedbackRequest(
+					List.of("강점"), List.of("개선점"), List.of("집중영역"), List.of("팁")
+				),
+				"설명",
+				null, null, null, null, null
+			);
+
+			CreateCallAnalysisRequest request = new CreateCallAnalysisRequest(conversation, taskCompletion, languageAccuracy);
+
+			// when & then
+			mockMvc.perform(post(getUrl(callId))
+					.header("Authorization", "Bearer " + accessToken)
+					.contentType(MediaType.APPLICATION_JSON)
+					.content(objectMapper.writeValueAsString(request)))
+				.andDo(print())
+				.andExpect(status().isBadRequest());
 		}
 	}
 }

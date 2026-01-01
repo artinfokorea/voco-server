@@ -1,31 +1,34 @@
 package com.voco.voco.app.call.application.usecase.dto.out;
 
 import java.util.List;
-import java.util.Map;
 
+import com.voco.voco.app.call.domain.enums.CallAnalysisGrade;
 import com.voco.voco.app.call.domain.model.CallAnalysisEntity;
 
 public record CallAnalysisInfo(
 	Long id,
-	Map<String, Object> taskCompletion,
-	Integer totalUserUtterances,
-	Integer correctUtterances,
-	List<Map<String, Object>> utteranceAnalyses,
-	List<Map<String, Object>> errors,
-	Map<String, Object> errorSummary,
-	ScoringInfo scoring,
-	FeedbackInfo feedback,
-	String briefDescription
+	CallAnalysisGrade grade,
+	Integer overallScore,
+	Integer taskCompletionScore,
+	String taskCompletionSummary,
+	Integer languageAccuracyScore,
+	String languageAccuracySummary,
+	List<ConversationInfo> conversation,
+	FeedbackInfo feedback
 ) {
-	public record ScoringInfo(
-		Integer baseScore,
-		Integer totalDeduction,
-		Integer criticalDeduction,
-		Integer majorDeduction,
-		Integer minorDeduction,
-		Integer levelAdjustment,
-		Integer finalScore,
-		String rating
+	public record ConversationInfo(
+		String role,
+		String content,
+		ConversationErrorInfo error
+	) {
+	}
+
+	public record ConversationErrorInfo(
+		String errorType,
+		String errorSubtype,
+		String errorSegment,
+		String correction,
+		String explanation
 	) {
 	}
 
@@ -38,35 +41,45 @@ public record CallAnalysisInfo(
 	}
 
 	public static CallAnalysisInfo from(CallAnalysisEntity entity) {
+		List<ConversationInfo> conversationInfos = null;
+		if (entity.getConversation() != null) {
+			conversationInfos = entity.getConversation().stream()
+				.map(c -> new ConversationInfo(
+					c.role(),
+					c.content(),
+					c.error() != null
+						? new ConversationErrorInfo(
+							c.error().errorType(),
+							c.error().errorSubtype(),
+							c.error().errorSegment(),
+							c.error().correction(),
+							c.error().explanation()
+						)
+						: null
+				))
+				.toList();
+		}
+
+		FeedbackInfo feedbackInfo = null;
+		if (entity.getFeedback() != null) {
+			feedbackInfo = new FeedbackInfo(
+				entity.getFeedback().getStrengths(),
+				entity.getFeedback().getImprovements(),
+				entity.getFeedback().getFocusAreas(),
+				entity.getFeedback().getTips()
+			);
+		}
+
 		return new CallAnalysisInfo(
 			entity.getId(),
-			entity.getTaskCompletion(),
-			entity.getTotalUserUtterances(),
-			entity.getCorrectUtterances(),
-			entity.getUtteranceAnalyses(),
-			entity.getErrors(),
-			entity.getErrorSummary(),
-			entity.getScoring() != null
-				? new ScoringInfo(
-					entity.getScoring().getBaseScore(),
-					entity.getScoring().getTotalDeduction(),
-					entity.getScoring().getCriticalDeduction(),
-					entity.getScoring().getMajorDeduction(),
-					entity.getScoring().getMinorDeduction(),
-					entity.getScoring().getLevelAdjustment(),
-					entity.getScoring().getFinalScore(),
-					entity.getScoring().getRating()
-				)
-				: null,
-			entity.getFeedback() != null
-				? new FeedbackInfo(
-					entity.getFeedback().getStrengths(),
-					entity.getFeedback().getImprovements(),
-					entity.getFeedback().getFocusAreas(),
-					entity.getFeedback().getTips()
-				)
-				: null,
-			entity.getBriefDescription()
+			entity.getGrade(),
+			entity.getOverallScore(),
+			entity.getTaskCompletionScore(),
+			entity.getTaskCompletionSummary(),
+			entity.getLanguageAccuracyScore(),
+			entity.getLanguageAccuracySummary(),
+			conversationInfos,
+			feedbackInfo
 		);
 	}
 }

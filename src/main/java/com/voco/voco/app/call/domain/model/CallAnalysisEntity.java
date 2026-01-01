@@ -1,18 +1,20 @@
 package com.voco.voco.app.call.domain.model;
 
 import java.util.List;
-import java.util.Map;
 
 import org.hibernate.annotations.JdbcTypeCode;
 import org.hibernate.type.SqlTypes;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import com.voco.voco.app.call.domain.enums.CallAnalysisGrade;
 import com.voco.voco.common.model.BaseModel;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -32,80 +34,77 @@ public class CallAnalysisEntity extends BaseModel {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 
-	@JdbcTypeCode(SqlTypes.JSON)
-	@Column(name = "task_completion", nullable = false)
-	private Map<String, Object> taskCompletion;
+	@Enumerated(EnumType.STRING)
+	@Column(name = "grade", nullable = false)
+	private CallAnalysisGrade grade;
 
-	@Column(name = "total_user_utterances", nullable = false)
-	private Integer totalUserUtterances;
-
-	@Column(name = "correct_utterances", nullable = false)
-	private Integer correctUtterances;
+	@Column(name = "overall_score", nullable = false)
+	private Integer overallScore;
 
 	@JdbcTypeCode(SqlTypes.JSON)
-	@Column(name = "utterance_analyses", nullable = false)
-	private List<Map<String, Object>> utteranceAnalyses;
+	@Column(name = "conversation")
+	private List<ConversationEntry> conversation;
 
-	@JdbcTypeCode(SqlTypes.JSON)
-	@Column(name = "errors")
-	private List<Map<String, Object>> errors;
+	@Column(name = "task_completion_score")
+	private Integer taskCompletionScore;
 
-	@JdbcTypeCode(SqlTypes.JSON)
-	@Column(name = "error_summary", nullable = false)
-	private Map<String, Object> errorSummary;
+	@Column(name = "task_completion_summary")
+	private String taskCompletionSummary;
 
-	@Embedded
-	private ScoringEmbeddable scoring;
+	@Column(name = "language_accuracy_score")
+	private Integer languageAccuracyScore;
+
+	@Column(name = "language_accuracy_summary")
+	private String languageAccuracySummary;
 
 	@Embedded
 	private FeedbackEmbeddable feedback;
 
-	@Column(name = "brief_description", nullable = false, columnDefinition = "TEXT")
-	private String briefDescription;
-
-	private CallAnalysisEntity(
-		Map<String, Object> taskCompletion,
-		Integer totalUserUtterances,
-		Integer correctUtterances,
-		List<Map<String, Object>> utteranceAnalyses,
-		List<Map<String, Object>> errors,
-		Map<String, Object> errorSummary,
-		ScoringEmbeddable scoring,
-		FeedbackEmbeddable feedback,
-		String briefDescription
+	public record ConversationEntry(
+		String role,
+		String content,
+		ConversationError error
 	) {
-		this.taskCompletion = taskCompletion;
-		this.totalUserUtterances = totalUserUtterances;
-		this.correctUtterances = correctUtterances;
-		this.utteranceAnalyses = utteranceAnalyses;
-		this.errors = errors;
-		this.errorSummary = errorSummary;
-		this.scoring = scoring;
-		this.feedback = feedback;
-		this.briefDescription = briefDescription;
+	}
+
+	public record ConversationError(
+		String errorType,
+		String errorSubtype,
+		String errorSegment,
+		String correction,
+		String explanation
+	) {
 	}
 
 	public static CallAnalysisEntity create(
-		Map<String, Object> taskCompletion,
-		Integer totalUserUtterances,
-		Integer correctUtterances,
-		List<Map<String, Object>> utteranceAnalyses,
-		List<Map<String, Object>> errors,
-		Map<String, Object> errorSummary,
-		ScoringEmbeddable scoring,
-		FeedbackEmbeddable feedback,
-		String briefDescription
+		List<ConversationEntry> conversation,
+		Integer taskCompletionScore,
+		String taskCompletionSummary,
+		Integer languageAccuracyScore,
+		String languageAccuracySummary,
+		FeedbackEmbeddable feedback
 	) {
-		return new CallAnalysisEntity(
-			taskCompletion,
-			totalUserUtterances,
-			correctUtterances,
-			utteranceAnalyses,
-			errors,
-			errorSummary,
-			scoring,
-			feedback,
-			briefDescription
-		);
+		CallAnalysisEntity entity = new CallAnalysisEntity();
+		entity.conversation = conversation;
+		entity.taskCompletionScore = taskCompletionScore;
+		entity.taskCompletionSummary = taskCompletionSummary;
+		entity.languageAccuracyScore = languageAccuracyScore;
+		entity.languageAccuracySummary = languageAccuracySummary;
+		entity.feedback = feedback;
+
+		int totalScore = 0;
+		int count = 0;
+		if (taskCompletionScore != null) {
+			totalScore += taskCompletionScore;
+			count++;
+		}
+		if (languageAccuracyScore != null) {
+			totalScore += languageAccuracyScore;
+			count++;
+		}
+		entity.overallScore = count > 0 ? totalScore / count : 0;
+		entity.grade = CallAnalysisGrade.fromScore(entity.overallScore);
+
+		return entity;
 	}
 }
