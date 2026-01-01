@@ -107,7 +107,13 @@ class CreateCallAnalysisUseCaseTest {
 	}
 
 	private CallEntity createCall() {
-		return CallEntity.create(1L, 1L, "room-1-1-beginner-abc12345");
+		return CallEntity.create(
+			1L,
+			1L,
+			"Test Scenario",
+			com.voco.voco.app.scenario.domain.model.Level.BEGINNER,
+			"room-1-1-beginner-abc12345"
+		);
 	}
 
 	@Nested

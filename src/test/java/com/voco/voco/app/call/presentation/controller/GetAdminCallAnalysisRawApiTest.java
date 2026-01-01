@@ -149,7 +149,13 @@ class GetAdminCallAnalysisRawApiTest {
 	}
 
 	private Long createCallWithAnalysisAndRaw(Long memberId, Long scenarioId) {
-		CallEntity call = CallEntity.create(memberId, scenarioId, "room-test-" + UUID.randomUUID());
+		CallEntity call = CallEntity.create(
+			memberId,
+			scenarioId,
+			"Cafe Order",
+			com.voco.voco.app.scenario.domain.model.Level.BEGINNER,
+			"room-test-" + UUID.randomUUID()
+		);
 		entityManager.persist(call);
 
 		CallAnalysisEntity analysis = CallAnalysisEntity.create(
@@ -190,7 +196,13 @@ class GetAdminCallAnalysisRawApiTest {
 	}
 
 	private Long createCallWithoutAnalysis(Long memberId, Long scenarioId) {
-		CallEntity call = CallEntity.create(memberId, scenarioId, "room-test-" + UUID.randomUUID());
+		CallEntity call = CallEntity.create(
+			memberId,
+			scenarioId,
+			"Cafe Order",
+			com.voco.voco.app.scenario.domain.model.Level.BEGINNER,
+			"room-test-" + UUID.randomUUID()
+		);
 		entityManager.persist(call);
 		entityManager.flush();
 		return call.getId();

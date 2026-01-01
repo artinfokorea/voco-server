@@ -38,7 +38,7 @@ public class CreateLiveKitTokenUseCase {
 		String participantIdentity = String.valueOf(member.getId());
 		String participantName = member.getKoreanName();
 
-		CallEntity call = CallEntity.create(memberId, scenarioId, roomName);
+		CallEntity call = CallEntity.create(memberId, scenarioId, scenario.getName(), scenario.getLevel(), roomName);
 		Long callId = callCommandRepository.save(call);
 
 		String metadata = createMetadata(scenario, callId);

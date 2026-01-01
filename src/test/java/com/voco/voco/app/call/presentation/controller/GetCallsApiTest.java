@@ -120,7 +120,13 @@ class GetCallsApiTest {
 	}
 
 	private CallEntity createCall(Long memberId, Long scenarioId) {
-		CallEntity call = CallEntity.create(memberId, scenarioId, "room-test-" + UUID.randomUUID());
+		CallEntity call = CallEntity.create(
+			memberId,
+			scenarioId,
+			"Cafe Order",
+			com.voco.voco.app.scenario.domain.model.Level.BEGINNER,
+			"room-test-" + UUID.randomUUID()
+		);
 		entityManager.persist(call);
 		return call;
 	}

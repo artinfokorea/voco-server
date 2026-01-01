@@ -71,7 +71,13 @@ class CreateCallAnalysisApiTest {
 		entityManager.persist(member);
 		entityManager.flush();
 
-		CallEntity call = CallEntity.create(member.getId(), 1L, "room-test-123");
+		CallEntity call = CallEntity.create(
+			member.getId(),
+			1L,
+			"Test Scenario",
+			com.voco.voco.app.scenario.domain.model.Level.BEGINNER,
+			"room-test-123"
+		);
 		entityManager.persist(call);
 		entityManager.flush();
 		callId = call.getId();

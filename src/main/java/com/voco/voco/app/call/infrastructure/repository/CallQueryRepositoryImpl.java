@@ -19,7 +19,6 @@ import com.voco.voco.app.call.domain.model.CallEntity;
 import com.voco.voco.app.call.domain.model.QCallAnalysisEntity;
 import com.voco.voco.app.call.domain.model.QCallEntity;
 import com.voco.voco.app.member.domain.model.QMemberEntity;
-import com.voco.voco.app.scenario.domain.model.QConversationScenarioEntity;
 import com.voco.voco.common.enums.ApiErrorType;
 import com.voco.voco.common.exception.CoreException;
 
@@ -33,7 +32,6 @@ public class CallQueryRepositoryImpl implements CallQueryRepository {
 	private final CallJpaRepository callJpaRepository;
 
 	private static final QCallEntity call = QCallEntity.callEntity;
-	private static final QConversationScenarioEntity scenario = QConversationScenarioEntity.conversationScenarioEntity;
 	private static final QCallAnalysisEntity analysis = QCallAnalysisEntity.callAnalysisEntity;
 	private static final QMemberEntity member = QMemberEntity.memberEntity;
 
@@ -50,11 +48,10 @@ public class CallQueryRepositoryImpl implements CallQueryRepository {
 				CallHistoryDomainDto.class,
 				call.id,
 				call.createdAt,
-				scenario.name,
+				call.scenarioName,
 				analysis.grade
 			))
 			.from(call)
-			.leftJoin(scenario).on(call.scenarioId.eq(scenario.id))
 			.leftJoin(analysis).on(call.analysisId.eq(analysis.id))
 			.where(call.memberId.eq(memberId))
 			.orderBy(call.createdAt.desc())
@@ -77,12 +74,11 @@ public class CallQueryRepositoryImpl implements CallQueryRepository {
 			.select(
 				call.id,
 				call.createdAt,
-				scenario.name,
-				scenario.level,
+				call.scenarioName,
+				call.scenarioLevel,
 				analysis
 			)
 			.from(call)
-			.leftJoin(scenario).on(call.scenarioId.eq(scenario.id))
 			.leftJoin(analysis).on(call.analysisId.eq(analysis.id))
 			.where(
 				call.id.eq(callId),
@@ -97,8 +93,8 @@ public class CallQueryRepositoryImpl implements CallQueryRepository {
 		return Optional.of(new CallDetailDomainDto(
 			result.get(call.id),
 			result.get(call.createdAt),
-			result.get(scenario.name),
-			result.get(scenario.level),
+			result.get(call.scenarioName),
+			result.get(call.scenarioLevel),
 			result.get(analysis)
 		));
 	}
@@ -108,15 +104,14 @@ public class CallQueryRepositoryImpl implements CallQueryRepository {
 		List<Tuple> results = queryFactory
 			.select(
 				call.id,
-				scenario.name,
+				call.scenarioName,
 				member.koreanName,
 				call.memberId,
-				scenario.level,
+				call.scenarioLevel,
 				analysis.createdAt,
 				analysis
 			)
 			.from(call)
-			.leftJoin(scenario).on(call.scenarioId.eq(scenario.id))
 			.leftJoin(member).on(call.memberId.eq(member.id))
 			.leftJoin(analysis).on(call.analysisId.eq(analysis.id))
 			.orderBy(call.createdAt.desc())
@@ -127,10 +122,10 @@ public class CallQueryRepositoryImpl implements CallQueryRepository {
 		List<AdminCallHistoryDomainDto> content = results.stream()
 			.map(tuple -> new AdminCallHistoryDomainDto(
 				tuple.get(call.id),
-				tuple.get(scenario.name),
+				tuple.get(call.scenarioName),
 				tuple.get(member.koreanName),
 				tuple.get(call.memberId),
-				tuple.get(scenario.level),
+				tuple.get(call.scenarioLevel),
 				tuple.get(analysis.createdAt),
 				tuple.get(analysis)
 			))
