@@ -5,6 +5,7 @@ import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import com.voco.voco.app.call.domain.interfaces.dto.out.AdminCallHistoryDomainDto;
 import com.voco.voco.app.call.domain.interfaces.dto.out.CallDetailDomainDto;
 import com.voco.voco.app.call.domain.interfaces.dto.out.CallHistoryDomainDto;
 import com.voco.voco.app.call.domain.model.CallEntity;
@@ -16,4 +17,6 @@ public interface CallQueryRepository {
 	Page<CallHistoryDomainDto> findCallHistoryByMemberId(Long memberId, Pageable pageable);
 
 	Optional<CallDetailDomainDto> findCallDetailByIdAndMemberId(Long callId, Long memberId);
+
+	Page<AdminCallHistoryDomainDto> findAllCallHistory(Pageable pageable);
 }
