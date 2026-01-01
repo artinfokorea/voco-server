@@ -1,16 +1,20 @@
 package com.voco.voco.app.call.infrastructure.repository;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Repository;
 
+import com.querydsl.core.Tuple;
 import com.querydsl.core.types.Projections;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import com.voco.voco.app.call.domain.interfaces.CallQueryRepository;
+import com.voco.voco.app.call.domain.interfaces.dto.out.CallDetailDomainDto;
 import com.voco.voco.app.call.domain.interfaces.dto.out.CallHistoryDomainDto;
+import com.voco.voco.app.call.domain.model.CallAnalysisEntity;
 import com.voco.voco.app.call.domain.model.CallEntity;
 import com.voco.voco.app.call.domain.model.QCallAnalysisEntity;
 import com.voco.voco.app.call.domain.model.QCallEntity;
@@ -63,5 +67,37 @@ public class CallQueryRepositoryImpl implements CallQueryRepository {
 			.fetchOne();
 
 		return new PageImpl<>(content, pageable, total != null ? total : 0L);
+	}
+
+	@Override
+	public Optional<CallDetailDomainDto> findCallDetailByIdAndMemberId(Long callId, Long memberId) {
+		Tuple result = queryFactory
+			.select(
+				call.id,
+				call.createdAt,
+				scenario.name,
+				scenario.level,
+				analysis
+			)
+			.from(call)
+			.leftJoin(scenario).on(call.scenarioId.eq(scenario.id))
+			.leftJoin(analysis).on(call.analysisId.eq(analysis.id))
+			.where(
+				call.id.eq(callId),
+				call.memberId.eq(memberId)
+			)
+			.fetchOne();
+
+		if (result == null) {
+			return Optional.empty();
+		}
+
+		return Optional.of(new CallDetailDomainDto(
+			result.get(call.id),
+			result.get(call.createdAt),
+			result.get(scenario.name),
+			result.get(scenario.level),
+			result.get(analysis)
+		));
 	}
 }

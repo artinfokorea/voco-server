@@ -19,6 +19,7 @@ public record GetCallsRequest(
 		}
 	}
 
+	@Schema(hidden = true)
 	public int getPageIndex() {
 		return page - 1;
 	}

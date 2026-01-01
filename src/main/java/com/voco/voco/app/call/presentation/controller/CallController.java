@@ -3,12 +3,16 @@ package com.voco.voco.app.call.presentation.controller;
 import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.voco.voco.app.call.application.usecase.GetCallDetailUseCase;
 import com.voco.voco.app.call.application.usecase.GetCallsUseCase;
+import com.voco.voco.app.call.application.usecase.dto.out.CallDetailInfo;
 import com.voco.voco.app.call.application.usecase.dto.out.CallHistoryInfo;
 import com.voco.voco.app.call.presentation.controller.dto.in.GetCallsRequest;
+import com.voco.voco.app.call.presentation.controller.dto.out.CallDetailResponse;
 import com.voco.voco.app.call.presentation.controller.dto.out.CallHistoryResponse;
 import com.voco.voco.common.annotation.MemberId;
 import com.voco.voco.common.dto.response.ApiResponse;
@@ -26,6 +30,7 @@ import lombok.RequiredArgsConstructor;
 public class CallController {
 
 	private final GetCallsUseCase getCallsUseCase;
+	private final GetCallDetailUseCase getCallDetailUseCase;
 
 	@Operation(summary = "통화 내역 목록 조회", description = "회원의 통화 내역을 페이징하여 조회합니다.")
 	@GetMapping
@@ -39,5 +44,15 @@ public class CallController {
 			request.size()
 		);
 		return ApiResponse.success(result.map(CallHistoryResponse::from));
+	}
+
+	@Operation(summary = "통화 상세 조회", description = "통화 상세 정보를 조회합니다.")
+	@GetMapping("/{callId}")
+	public ApiResponse<CallDetailResponse> getCallDetail(
+		@MemberId Long memberId,
+		@PathVariable Long callId
+	) {
+		CallDetailInfo result = getCallDetailUseCase.execute(callId, memberId);
+		return ApiResponse.success(CallDetailResponse.from(result));
 	}
 }
