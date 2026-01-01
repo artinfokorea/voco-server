@@ -1,6 +1,5 @@
 package com.voco.voco.app.scenario.presentation.controller;
 
-import org.springframework.data.domain.Page;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -17,7 +16,6 @@ import com.voco.voco.app.scenario.application.usecase.GetScenarioDetailUseCase;
 import com.voco.voco.app.scenario.application.usecase.GetScenariosUseCase;
 import com.voco.voco.app.scenario.application.usecase.UpdateScenarioUseCase;
 import com.voco.voco.app.scenario.application.usecase.dto.out.ScenarioDetailInfo;
-import com.voco.voco.app.scenario.application.usecase.dto.out.ScenarioSummaryInfo;
 import com.voco.voco.app.scenario.presentation.controller.dto.in.CreateScenarioRequest;
 import com.voco.voco.app.scenario.presentation.controller.dto.in.GetScenariosRequest;
 import com.voco.voco.app.scenario.presentation.controller.dto.in.UpdateScenarioRequest;
@@ -26,6 +24,7 @@ import com.voco.voco.app.scenario.presentation.controller.dto.out.ScenarioSummar
 import com.voco.voco.common.annotation.AdminId;
 import com.voco.voco.common.annotation.MemberId;
 import com.voco.voco.common.dto.response.ApiResponse;
+import com.voco.voco.common.dto.response.PageResponse;
 
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -48,16 +47,16 @@ public class ScenarioController {
 
 	@Operation(summary = "시나리오 목록 조회", description = "시나리오 목록을 페이징하여 조회합니다. 레벨로 필터링할 수 있습니다.")
 	@GetMapping
-	public ApiResponse<Page<ScenarioSummaryResponse>> getScenarios(
+	public ApiResponse<PageResponse<ScenarioSummaryResponse>> getScenarios(
 		@MemberId Long memberId,
 		@ModelAttribute GetScenariosRequest request
 	) {
-		Page<ScenarioSummaryInfo> result = getScenariosUseCase.execute(
-			request.level(),
-			request.getPageIndex(),
-			request.size()
+		return ApiResponse.success(
+			PageResponse.from(
+				getScenariosUseCase.execute(request.level(), request.getPageIndex(), request.size())
+					.map(ScenarioSummaryResponse::from)
+			)
 		);
-		return ApiResponse.success(result.map(ScenarioSummaryResponse::from));
 	}
 
 	@Operation(summary = "시나리오 상세 조회", description = "시나리오 상세 정보를 조회합니다.")

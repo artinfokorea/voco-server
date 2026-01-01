@@ -132,7 +132,7 @@ class GetScenariosApiTest {
 			.andExpect(jsonPath("$.type").value("SUCCESS"))
 			.andExpect(jsonPath("$.item.content").isArray())
 			.andExpect(jsonPath("$.item.content.length()").value(2))
-			.andExpect(jsonPath("$.item.totalElements").value(2));
+			.andExpect(jsonPath("$.item.page.totalElements").value(2));
 	}
 
 	@Test
@@ -155,7 +155,7 @@ class GetScenariosApiTest {
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.type").value("SUCCESS"))
 			.andExpect(jsonPath("$.item.content.length()").value(2))
-			.andExpect(jsonPath("$.item.totalElements").value(2));
+			.andExpect(jsonPath("$.item.page.totalElements").value(2));
 	}
 
 	@Test
@@ -179,8 +179,8 @@ class GetScenariosApiTest {
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.type").value("SUCCESS"))
 			.andExpect(jsonPath("$.item.content.length()").value(10))
-			.andExpect(jsonPath("$.item.totalElements").value(15))
-			.andExpect(jsonPath("$.item.totalPages").value(2));
+			.andExpect(jsonPath("$.item.page.totalElements").value(15))
+			.andExpect(jsonPath("$.item.page.totalPages").value(2));
 	}
 
 	@Test
@@ -231,6 +231,6 @@ class GetScenariosApiTest {
 			.andExpect(jsonPath("$.type").value("SUCCESS"))
 			.andExpect(jsonPath("$.item.content").isArray())
 			.andExpect(jsonPath("$.item.content.length()").value(0))
-			.andExpect(jsonPath("$.item.totalElements").value(0));
+			.andExpect(jsonPath("$.item.page.totalElements").value(0));
 	}
 }
