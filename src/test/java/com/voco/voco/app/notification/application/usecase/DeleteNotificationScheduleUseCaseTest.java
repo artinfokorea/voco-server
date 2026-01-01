@@ -45,7 +45,7 @@ class DeleteNotificationScheduleUseCaseTest {
 				SCHEDULE_ID, MEMBER_ID);
 
 			NotificationScheduleEntity schedule = NotificationScheduleEntity.create(
-				MEMBER_ID, DayOfWeek.MONDAY, LocalTime.of(9, 0));
+				MEMBER_ID, DayOfWeek.MONDAY, LocalTime.of(9, 0), null);
 
 			given(notificationScheduleQueryRepository.findByIdAndMemberId(dto.id(), dto.memberId()))
 				.willReturn(Optional.of(schedule));

@@ -81,7 +81,8 @@ class CreateNotificationScheduleApiTest {
 		// given
 		CreateNotificationScheduleRequest request = new CreateNotificationScheduleRequest(
 			DayOfWeek.MONDAY,
-			LocalTime.of(9, 0)
+			LocalTime.of(9, 0),
+			null
 		);
 
 		// when
@@ -103,7 +104,8 @@ class CreateNotificationScheduleApiTest {
 		// given
 		CreateNotificationScheduleRequest request = new CreateNotificationScheduleRequest(
 			DayOfWeek.MONDAY,
-			LocalTime.of(9, 0)
+			LocalTime.of(9, 0),
+			null
 		);
 
 		mockMvc.perform(post(NOTIFICATION_SCHEDULE_URL)
@@ -131,7 +133,8 @@ class CreateNotificationScheduleApiTest {
 		// given
 		CreateNotificationScheduleRequest firstRequest = new CreateNotificationScheduleRequest(
 			DayOfWeek.MONDAY,
-			LocalTime.of(9, 0)
+			LocalTime.of(9, 0),
+			null
 		);
 
 		mockMvc.perform(post(NOTIFICATION_SCHEDULE_URL)
@@ -141,7 +144,8 @@ class CreateNotificationScheduleApiTest {
 
 		CreateNotificationScheduleRequest secondRequest = new CreateNotificationScheduleRequest(
 			DayOfWeek.MONDAY,
-			LocalTime.of(18, 0)
+			LocalTime.of(18, 0),
+			null
 		);
 
 		// when
@@ -163,7 +167,8 @@ class CreateNotificationScheduleApiTest {
 		// given
 		CreateNotificationScheduleRequest firstRequest = new CreateNotificationScheduleRequest(
 			DayOfWeek.MONDAY,
-			LocalTime.of(9, 0)
+			LocalTime.of(9, 0),
+			null
 		);
 
 		mockMvc.perform(post(NOTIFICATION_SCHEDULE_URL)
@@ -173,7 +178,8 @@ class CreateNotificationScheduleApiTest {
 
 		CreateNotificationScheduleRequest secondRequest = new CreateNotificationScheduleRequest(
 			DayOfWeek.FRIDAY,
-			LocalTime.of(9, 0)
+			LocalTime.of(9, 0),
+			null
 		);
 
 		// when
@@ -195,7 +201,8 @@ class CreateNotificationScheduleApiTest {
 		// given
 		CreateNotificationScheduleRequest request = new CreateNotificationScheduleRequest(
 			DayOfWeek.MONDAY,
-			LocalTime.of(9, 0)
+			LocalTime.of(9, 0),
+			null
 		);
 
 		// when

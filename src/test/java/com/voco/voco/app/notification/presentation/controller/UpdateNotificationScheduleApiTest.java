@@ -88,7 +88,7 @@ class UpdateNotificationScheduleApiTest {
 	}
 
 	private Long createSchedule(DayOfWeek dayOfWeek, LocalTime time) throws Exception {
-		CreateNotificationScheduleRequest request = new CreateNotificationScheduleRequest(dayOfWeek, time);
+		CreateNotificationScheduleRequest request = new CreateNotificationScheduleRequest(dayOfWeek, time, null);
 		mockMvc.perform(post(NOTIFICATION_SCHEDULE_URL)
 			.header("Authorization", "Bearer " + accessToken)
 			.contentType(MediaType.APPLICATION_JSON)
@@ -111,7 +111,8 @@ class UpdateNotificationScheduleApiTest {
 
 		UpdateNotificationScheduleRequest request = new UpdateNotificationScheduleRequest(
 			DayOfWeek.FRIDAY,
-			LocalTime.of(18, 0)
+			LocalTime.of(18, 0),
+			null
 		);
 
 		// when
@@ -135,7 +136,8 @@ class UpdateNotificationScheduleApiTest {
 
 		UpdateNotificationScheduleRequest request = new UpdateNotificationScheduleRequest(
 			DayOfWeek.FRIDAY,
-			LocalTime.of(18, 0)
+			LocalTime.of(18, 0),
+			null
 		);
 
 		// when
@@ -182,7 +184,8 @@ class UpdateNotificationScheduleApiTest {
 
 		UpdateNotificationScheduleRequest request = new UpdateNotificationScheduleRequest(
 			DayOfWeek.FRIDAY,
-			LocalTime.of(18, 0)
+			LocalTime.of(18, 0),
+			null
 		);
 
 		// when
@@ -207,7 +210,8 @@ class UpdateNotificationScheduleApiTest {
 
 		UpdateNotificationScheduleRequest request = new UpdateNotificationScheduleRequest(
 			DayOfWeek.FRIDAY,
-			LocalTime.of(18, 0)
+			LocalTime.of(18, 0),
+			null
 		);
 
 		// when

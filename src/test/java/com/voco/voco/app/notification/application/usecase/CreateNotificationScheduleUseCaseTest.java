@@ -47,7 +47,7 @@ class CreateNotificationScheduleUseCaseTest {
 		void createNotificationSchedule_Success() {
 			// given
 			CreateNotificationScheduleUseCaseDto dto = new CreateNotificationScheduleUseCaseDto(
-				MEMBER_ID, DAY_OF_WEEK, NOTIFICATION_TIME);
+				MEMBER_ID, DAY_OF_WEEK, NOTIFICATION_TIME, null);
 
 			given(notificationScheduleQueryRepository.exists(dto.toDomainDto())).willReturn(false);
 
@@ -63,7 +63,7 @@ class CreateNotificationScheduleUseCaseTest {
 		void createNotificationSchedule_Duplicated_ThrowsException() {
 			// given
 			CreateNotificationScheduleUseCaseDto dto = new CreateNotificationScheduleUseCaseDto(
-				MEMBER_ID, DAY_OF_WEEK, NOTIFICATION_TIME);
+				MEMBER_ID, DAY_OF_WEEK, NOTIFICATION_TIME, null);
 
 			given(notificationScheduleQueryRepository.exists(dto.toDomainDto())).willReturn(true);
 
@@ -84,7 +84,7 @@ class CreateNotificationScheduleUseCaseTest {
 			// given
 			LocalTime differentTime = LocalTime.of(18, 0);
 			CreateNotificationScheduleUseCaseDto dto = new CreateNotificationScheduleUseCaseDto(
-				MEMBER_ID, DAY_OF_WEEK, differentTime);
+				MEMBER_ID, DAY_OF_WEEK, differentTime, null);
 
 			given(notificationScheduleQueryRepository.exists(dto.toDomainDto())).willReturn(false);
 
@@ -101,7 +101,7 @@ class CreateNotificationScheduleUseCaseTest {
 			// given
 			DayOfWeek differentDay = DayOfWeek.FRIDAY;
 			CreateNotificationScheduleUseCaseDto dto = new CreateNotificationScheduleUseCaseDto(
-				MEMBER_ID, differentDay, NOTIFICATION_TIME);
+				MEMBER_ID, differentDay, NOTIFICATION_TIME, null);
 
 			given(notificationScheduleQueryRepository.exists(dto.toDomainDto())).willReturn(false);
 

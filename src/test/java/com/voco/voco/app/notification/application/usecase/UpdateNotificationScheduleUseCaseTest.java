@@ -46,10 +46,10 @@ class UpdateNotificationScheduleUseCaseTest {
 		void updateNotificationSchedule_Success() {
 			// given
 			UpdateNotificationScheduleUseCaseDto dto = new UpdateNotificationScheduleUseCaseDto(
-				SCHEDULE_ID, MEMBER_ID, NEW_DAY, NEW_TIME);
+				SCHEDULE_ID, MEMBER_ID, NEW_DAY, NEW_TIME, null);
 
 			NotificationScheduleEntity schedule = NotificationScheduleEntity.create(
-				MEMBER_ID, ORIGINAL_DAY, ORIGINAL_TIME);
+				MEMBER_ID, ORIGINAL_DAY, ORIGINAL_TIME, null);
 
 			given(notificationScheduleQueryRepository.findByIdAndMemberId(dto.id(), dto.memberId()))
 				.willReturn(Optional.of(schedule));
@@ -67,7 +67,7 @@ class UpdateNotificationScheduleUseCaseTest {
 		void updateNotificationSchedule_NotFound_ThrowsException() {
 			// given
 			UpdateNotificationScheduleUseCaseDto dto = new UpdateNotificationScheduleUseCaseDto(
-				SCHEDULE_ID, MEMBER_ID, NEW_DAY, NEW_TIME);
+				SCHEDULE_ID, MEMBER_ID, NEW_DAY, NEW_TIME, null);
 
 			given(notificationScheduleQueryRepository.findByIdAndMemberId(dto.id(), dto.memberId()))
 				.willReturn(Optional.empty());
@@ -87,7 +87,7 @@ class UpdateNotificationScheduleUseCaseTest {
 			// given
 			Long otherMemberId = 2L;
 			UpdateNotificationScheduleUseCaseDto dto = new UpdateNotificationScheduleUseCaseDto(
-				SCHEDULE_ID, otherMemberId, NEW_DAY, NEW_TIME);
+				SCHEDULE_ID, otherMemberId, NEW_DAY, NEW_TIME, null);
 
 			given(notificationScheduleQueryRepository.findByIdAndMemberId(dto.id(), dto.memberId()))
 				.willReturn(Optional.empty());
@@ -106,10 +106,10 @@ class UpdateNotificationScheduleUseCaseTest {
 		void updateNotificationSchedule_OnlyDayChange_Success() {
 			// given
 			UpdateNotificationScheduleUseCaseDto dto = new UpdateNotificationScheduleUseCaseDto(
-				SCHEDULE_ID, MEMBER_ID, NEW_DAY, ORIGINAL_TIME);
+				SCHEDULE_ID, MEMBER_ID, NEW_DAY, ORIGINAL_TIME, null);
 
 			NotificationScheduleEntity schedule = NotificationScheduleEntity.create(
-				MEMBER_ID, ORIGINAL_DAY, ORIGINAL_TIME);
+				MEMBER_ID, ORIGINAL_DAY, ORIGINAL_TIME, null);
 
 			given(notificationScheduleQueryRepository.findByIdAndMemberId(dto.id(), dto.memberId()))
 				.willReturn(Optional.of(schedule));
@@ -127,10 +127,10 @@ class UpdateNotificationScheduleUseCaseTest {
 		void updateNotificationSchedule_OnlyTimeChange_Success() {
 			// given
 			UpdateNotificationScheduleUseCaseDto dto = new UpdateNotificationScheduleUseCaseDto(
-				SCHEDULE_ID, MEMBER_ID, ORIGINAL_DAY, NEW_TIME);
+				SCHEDULE_ID, MEMBER_ID, ORIGINAL_DAY, NEW_TIME, null);
 
 			NotificationScheduleEntity schedule = NotificationScheduleEntity.create(
-				MEMBER_ID, ORIGINAL_DAY, ORIGINAL_TIME);
+				MEMBER_ID, ORIGINAL_DAY, ORIGINAL_TIME, null);
 
 			given(notificationScheduleQueryRepository.findByIdAndMemberId(dto.id(), dto.memberId()))
 				.willReturn(Optional.of(schedule));

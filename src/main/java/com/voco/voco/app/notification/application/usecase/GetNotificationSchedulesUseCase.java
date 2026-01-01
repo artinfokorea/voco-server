@@ -18,7 +18,7 @@ public class GetNotificationSchedulesUseCase {
 	private final NotificationScheduleQueryRepository notificationScheduleQueryRepository;
 
 	public List<NotificationScheduleInfo> execute(Long memberId) {
-		return notificationScheduleQueryRepository.findAllByMemberId(memberId)
+		return notificationScheduleQueryRepository.findAllWithScenarioByMemberId(memberId)
 			.stream()
 			.map(NotificationScheduleInfo::from)
 			.toList();

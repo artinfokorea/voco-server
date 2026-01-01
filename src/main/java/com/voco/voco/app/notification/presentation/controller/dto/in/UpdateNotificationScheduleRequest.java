@@ -16,9 +16,12 @@ public record UpdateNotificationScheduleRequest(
 
 	@Schema(description = "알림 시간", example = "09:00")
 	@NotNull(message = "알림 시간은 필수입니다.")
-	LocalTime notificationTime
+	LocalTime notificationTime,
+
+	@Schema(description = "시나리오 ID", example = "1")
+	Long scenarioId
 ) {
 	public UpdateNotificationScheduleUseCaseDto toUseCaseDto(Long id, Long memberId) {
-		return new UpdateNotificationScheduleUseCaseDto(id, memberId, dayOfWeek, notificationTime);
+		return new UpdateNotificationScheduleUseCaseDto(id, memberId, dayOfWeek, notificationTime, scenarioId);
 	}
 }

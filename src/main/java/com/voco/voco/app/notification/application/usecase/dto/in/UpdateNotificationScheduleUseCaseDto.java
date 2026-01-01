@@ -7,6 +7,7 @@ public record UpdateNotificationScheduleUseCaseDto(
 	Long id,
 	Long memberId,
 	DayOfWeek dayOfWeek,
-	LocalTime notificationTime
+	LocalTime notificationTime,
+	Long scenarioId
 ) {
 }

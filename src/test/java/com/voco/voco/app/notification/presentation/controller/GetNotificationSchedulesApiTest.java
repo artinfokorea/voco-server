@@ -76,7 +76,7 @@ class GetNotificationSchedulesApiTest {
 	}
 
 	private void createSchedule(DayOfWeek dayOfWeek, LocalTime time) throws Exception {
-		CreateNotificationScheduleRequest request = new CreateNotificationScheduleRequest(dayOfWeek, time);
+		CreateNotificationScheduleRequest request = new CreateNotificationScheduleRequest(dayOfWeek, time, null);
 		mockMvc.perform(post(NOTIFICATION_SCHEDULE_URL)
 			.header("Authorization", "Bearer " + accessToken)
 			.contentType(MediaType.APPLICATION_JSON)

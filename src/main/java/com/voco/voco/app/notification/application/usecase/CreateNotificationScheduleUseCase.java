@@ -26,7 +26,7 @@ public class CreateNotificationScheduleUseCase {
 		}
 
 		notificationScheduleCommandRepository.save(
-			NotificationScheduleEntity.create(dto.memberId(), dto.dayOfWeek(), dto.notificationTime())
+			NotificationScheduleEntity.create(dto.memberId(), dto.dayOfWeek(), dto.notificationTime(), dto.scenarioId())
 		);
 	}
 }

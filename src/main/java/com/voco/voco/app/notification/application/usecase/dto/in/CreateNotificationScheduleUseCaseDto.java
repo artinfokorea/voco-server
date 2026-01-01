@@ -8,7 +8,8 @@ import com.voco.voco.app.notification.domain.interfaces.dto.in.NotificationSched
 public record CreateNotificationScheduleUseCaseDto(
 	Long memberId,
 	DayOfWeek dayOfWeek,
-	LocalTime notificationTime
+	LocalTime notificationTime,
+	Long scenarioId
 ) {
 	public NotificationScheduleDomainDto toDomainDto() {
 		return new NotificationScheduleDomainDto(memberId, dayOfWeek, notificationTime);

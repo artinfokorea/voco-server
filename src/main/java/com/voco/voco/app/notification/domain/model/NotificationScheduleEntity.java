@@ -46,18 +46,23 @@ public class NotificationScheduleEntity extends BaseModel {
 	@Column(name = "notification_time", nullable = false)
 	private LocalTime notificationTime;
 
-	private NotificationScheduleEntity(Long memberId, DayOfWeek dayOfWeek, LocalTime notificationTime) {
+	@Column(name = "scenario_id")
+	private Long scenarioId;
+
+	private NotificationScheduleEntity(Long memberId, DayOfWeek dayOfWeek, LocalTime notificationTime, Long scenarioId) {
 		this.memberId = memberId;
 		this.dayOfWeek = dayOfWeek;
 		this.notificationTime = notificationTime;
+		this.scenarioId = scenarioId;
 	}
 
-	public static NotificationScheduleEntity create(Long memberId, DayOfWeek dayOfWeek, LocalTime notificationTime) {
-		return new NotificationScheduleEntity(memberId, dayOfWeek, notificationTime);
+	public static NotificationScheduleEntity create(Long memberId, DayOfWeek dayOfWeek, LocalTime notificationTime, Long scenarioId) {
+		return new NotificationScheduleEntity(memberId, dayOfWeek, notificationTime, scenarioId);
 	}
 
-	public void update(DayOfWeek dayOfWeek, LocalTime notificationTime) {
+	public void update(DayOfWeek dayOfWeek, LocalTime notificationTime, Long scenarioId) {
 		this.dayOfWeek = dayOfWeek;
 		this.notificationTime = notificationTime;
+		this.scenarioId = scenarioId;
 	}
 }

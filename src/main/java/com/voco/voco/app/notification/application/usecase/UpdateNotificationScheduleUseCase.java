@@ -23,6 +23,6 @@ public class UpdateNotificationScheduleUseCase {
 			.findByIdAndMemberId(dto.id(), dto.memberId())
 			.orElseThrow(() -> new CoreException(ApiErrorType.NOTIFICATION_SCHEDULE_NOT_FOUND));
 
-		schedule.update(dto.dayOfWeek(), dto.notificationTime());
+		schedule.update(dto.dayOfWeek(), dto.notificationTime(), dto.scenarioId());
 	}
 }
