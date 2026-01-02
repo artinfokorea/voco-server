@@ -5,6 +5,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.voco.voco.app.auth.application.usecase.AdminRefreshTokenUseCase;
 import com.voco.voco.app.auth.application.usecase.AdminSignInUseCase;
 import com.voco.voco.app.auth.application.usecase.RefreshTokenUseCase;
 import com.voco.voco.app.auth.application.usecase.SignInUseCase;
@@ -31,6 +32,7 @@ public class AuthController {
 	private final AdminSignInUseCase adminSignInUseCase;
 	private final SocialSignInUseCase socialSignInUseCase;
 	private final RefreshTokenUseCase refreshTokenUseCase;
+	private final AdminRefreshTokenUseCase adminRefreshTokenUseCase;
 
 	@Operation(summary = "이메일 로그인", description = "이메일과 비밀번호로 로그인합니다.")
 	@PostMapping("/sign-in")
@@ -57,6 +59,13 @@ public class AuthController {
 	@PostMapping("/refresh")
 	public ApiResponse<TokenResponse> refresh(@Valid @RequestBody RefreshTokenRequest request) {
 		TokenInfo tokenInfo = refreshTokenUseCase.execute(request.toUseCaseDto());
+		return ApiResponse.success(TokenResponse.from(tokenInfo));
+	}
+
+	@Operation(summary = "관리자 토큰 갱신", description = "관리자 계정의 토큰을 갱신합니다.")
+	@PostMapping("/admin/refresh")
+	public ApiResponse<TokenResponse> adminRefresh(@Valid @RequestBody RefreshTokenRequest request) {
+		TokenInfo tokenInfo = adminRefreshTokenUseCase.execute(request.toUseCaseDto());
 		return ApiResponse.success(TokenResponse.from(tokenInfo));
 	}
 }
