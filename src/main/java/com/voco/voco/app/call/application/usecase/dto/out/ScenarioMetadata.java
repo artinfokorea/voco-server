@@ -13,26 +13,32 @@ import com.voco.voco.app.scenario.domain.model.ConversationStateEntity;
 @JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 public record ScenarioMetadata(
 	Long callId,
-	Long scenarioId,
-	String scenarioTitle,
-	String language,
-	LocalDateTime createdAt,
-	LocalDateTime updatedAt,
-	String aiRoleEn,
-	String aiRoleKo,
-	String userRoleEn,
-	String userRoleKo,
-	String level,
-	String scenarioContext,
-	String personality,
-	String vocabRules,
-	String sentenceRules,
-	String outputConstraints,
-	String behaviorRules,
-	List<String> stateList,
-	List<SlotInfo> slots,
-	String completionRule
+	ScenarioSpec scenarioSpec
 ) {
+	@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
+	public record ScenarioSpec(
+		Long scenarioId,
+		String scenarioTitle,
+		String language,
+		LocalDateTime createdAt,
+		LocalDateTime updatedAt,
+		String aiRoleEn,
+		String aiRoleKo,
+		String userRoleEn,
+		String userRoleKo,
+		String level,
+		String scenarioContext,
+		String personality,
+		String vocabRules,
+		String sentenceRules,
+		String outputConstraints,
+		String behaviorRules,
+		List<String> stateList,
+		List<SlotInfo> slots,
+		String completionRule
+	) {
+	}
+
 	@JsonNaming(PropertyNamingStrategies.SnakeCaseStrategy.class)
 	public record SlotInfo(
 		String name,
@@ -41,8 +47,7 @@ public record ScenarioMetadata(
 	}
 
 	public static ScenarioMetadata from(ConversationScenarioEntity scenario, Long callId) {
-		return new ScenarioMetadata(
-			callId,
+		ScenarioSpec spec = new ScenarioSpec(
 			scenario.getId(),
 			scenario.getName(),
 			"en",
@@ -67,6 +72,8 @@ public record ScenarioMetadata(
 				.collect(Collectors.toList()),
 			formatCompletionRule(scenario)
 		);
+
+		return new ScenarioMetadata(callId, spec);
 	}
 
 	private static String formatList(List<String> list) {
