@@ -45,11 +45,17 @@ public class ConversationScenarioEntity extends BaseModel {
 	@Column(name = "level", nullable = false, length = 20)
 	private Level level;
 
-	@Column(name = "ai_role", nullable = false, length = 50)
-	private String aiRole;
+	@Column(name = "ai_role_en", nullable = false, length = 50)
+	private String aiRoleEn;
 
-	@Column(name = "user_role", nullable = false, length = 50)
-	private String userRole;
+	@Column(name = "ai_role_ko", nullable = false, length = 50)
+	private String aiRoleKo;
+
+	@Column(name = "user_role_en", nullable = false, length = 50)
+	private String userRoleEn;
+
+	@Column(name = "user_role_ko", nullable = false, length = 50)
+	private String userRoleKo;
 
 	@Column(name = "completion_rule", nullable = false, length = 100)
 	private String completionRule;
@@ -77,15 +83,19 @@ public class ConversationScenarioEntity extends BaseModel {
 	private ConversationScenarioEntity(
 		String name,
 		Level level,
-		String aiRole,
-		String userRole,
+		String aiRoleEn,
+		String aiRoleKo,
+		String userRoleEn,
+		String userRoleKo,
 		String completionRule,
 		List<String> completionRuleDetail
 	) {
 		this.name = name;
 		this.level = level;
-		this.aiRole = aiRole;
-		this.userRole = userRole;
+		this.aiRoleEn = aiRoleEn;
+		this.aiRoleKo = aiRoleKo;
+		this.userRoleEn = userRoleEn;
+		this.userRoleKo = userRoleKo;
 		this.completionRule = completionRule;
 		this.completionRuleDetail = completionRuleDetail;
 	}
@@ -93,16 +103,20 @@ public class ConversationScenarioEntity extends BaseModel {
 	public static ConversationScenarioEntity create(
 		String name,
 		Level level,
-		String aiRole,
-		String userRole,
+		String aiRoleEn,
+		String aiRoleKo,
+		String userRoleEn,
+		String userRoleKo,
 		String completionRule,
 		List<String> completionRuleDetail
 	) {
 		return new ConversationScenarioEntity(
 			name,
 			level,
-			aiRole,
-			userRole,
+			aiRoleEn,
+			aiRoleKo,
+			userRoleEn,
+			userRoleKo,
 			completionRule,
 			completionRuleDetail
 		);
@@ -136,15 +150,19 @@ public class ConversationScenarioEntity extends BaseModel {
 	public void update(
 		String name,
 		Level level,
-		String aiRole,
-		String userRole,
+		String aiRoleEn,
+		String aiRoleKo,
+		String userRoleEn,
+		String userRoleKo,
 		String completionRule,
 		List<String> completionRuleDetail
 	) {
 		this.name = name;
 		this.level = level;
-		this.aiRole = aiRole;
-		this.userRole = userRole;
+		this.aiRoleEn = aiRoleEn;
+		this.aiRoleKo = aiRoleKo;
+		this.userRoleEn = userRoleEn;
+		this.userRoleKo = userRoleKo;
 		this.completionRule = completionRule;
 		this.completionRuleDetail = completionRuleDetail;
 	}

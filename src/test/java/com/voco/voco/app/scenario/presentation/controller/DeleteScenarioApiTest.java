@@ -92,7 +92,9 @@ class DeleteScenarioApiTest {
 			"Cafe Order",
 			Level.BEGINNER,
 			"a cafe staff member",
+			"카페 직원",
 			"a customer",
+			"손님",
 			"When all required information is collected",
 			List.of("Confirm the order")
 		);

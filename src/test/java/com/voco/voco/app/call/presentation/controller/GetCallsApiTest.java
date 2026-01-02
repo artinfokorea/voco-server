@@ -100,7 +100,9 @@ class GetCallsApiTest {
 			name,
 			com.voco.voco.app.scenario.domain.model.Level.BEGINNER,
 			"ai role",
+			"AI 역할",
 			"user role",
+			"사용자 역할",
 			"completion rule",
 			List.of("detail")
 		);

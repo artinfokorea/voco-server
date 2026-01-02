@@ -25,8 +25,10 @@ public class CreateScenarioUseCase {
 		ConversationScenarioEntity scenario = ConversationScenarioEntity.create(
 			dto.name(),
 			dto.level(),
-			dto.aiRole(),
-			dto.userRole(),
+			dto.aiRoleEn(),
+			dto.aiRoleKo(),
+			dto.userRoleEn(),
+			dto.userRoleKo(),
 			dto.completionRule(),
 			dto.completionRuleDetail()
 		);

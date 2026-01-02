@@ -54,8 +54,10 @@ class GetScenarioDetailUseCaseTest {
 			assertThat(result.scenarioId()).isEqualTo(SCENARIO_ID);
 			assertThat(result.name()).isEqualTo("Cafe Order");
 			assertThat(result.level()).isEqualTo("BEGINNER");
-			assertThat(result.aiRole()).isEqualTo("a cafe staff member");
-			assertThat(result.userRole()).isEqualTo("a customer");
+			assertThat(result.aiRoleEn()).isEqualTo("a cafe staff member");
+			assertThat(result.aiRoleKo()).isEqualTo("카페 직원");
+			assertThat(result.userRoleEn()).isEqualTo("a customer");
+			assertThat(result.userRoleKo()).isEqualTo("손님");
 		}
 
 		@Test
@@ -172,7 +174,9 @@ class GetScenarioDetailUseCaseTest {
 			"Cafe Order",
 			Level.BEGINNER,
 			"a cafe staff member",
+			"카페 직원",
 			"a customer",
+			"손님",
 			"When all required information is collected",
 			List.of("Confirm the order")
 		);

@@ -55,8 +55,10 @@ class UpdateScenarioUseCaseTest {
 			// then
 			assertThat(existingScenario.getName()).isEqualTo("Updated Cafe Order");
 			assertThat(existingScenario.getLevel()).isEqualTo(Level.INTERMEDIATE);
-			assertThat(existingScenario.getAiRole()).isEqualTo("an updated cafe staff member");
-			assertThat(existingScenario.getUserRole()).isEqualTo("an updated customer");
+			assertThat(existingScenario.getAiRoleEn()).isEqualTo("an updated cafe staff member");
+			assertThat(existingScenario.getAiRoleKo()).isEqualTo("수정된 카페 직원");
+			assertThat(existingScenario.getUserRoleEn()).isEqualTo("an updated customer");
+			assertThat(existingScenario.getUserRoleKo()).isEqualTo("수정된 손님");
 		}
 
 		@Test
@@ -154,7 +156,9 @@ class UpdateScenarioUseCaseTest {
 				"Updated Name",
 				Level.BEGINNER,
 				"ai role",
+				"AI 역할",
 				"user role",
+				"사용자 역할",
 				"completion rule",
 				List.of(),
 				new UpdateScenarioUseCaseDto.ScenarioContextDto("context", List.of()),
@@ -176,7 +180,9 @@ class UpdateScenarioUseCaseTest {
 			"Cafe Order",
 			Level.BEGINNER,
 			"a cafe staff member",
+			"카페 직원",
 			"a customer",
+			"손님",
 			"When all required information is collected",
 			List.of("Confirm the order")
 		);
@@ -217,7 +223,9 @@ class UpdateScenarioUseCaseTest {
 			"Updated Cafe Order",
 			Level.INTERMEDIATE,
 			"an updated cafe staff member",
+			"수정된 카페 직원",
 			"an updated customer",
+			"수정된 손님",
 			"Updated completion rule",
 			List.of("Updated completion detail"),
 			new UpdateScenarioUseCaseDto.ScenarioContextDto(

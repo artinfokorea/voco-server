@@ -7,8 +7,10 @@ import com.voco.voco.app.scenario.domain.model.Level;
 public record CreateScenarioUseCaseDto(
 	String name,
 	Level level,
-	String aiRole,
-	String userRole,
+	String aiRoleEn,
+	String aiRoleKo,
+	String userRoleEn,
+	String userRoleKo,
 	String completionRule,
 	List<String> completionRuleDetail,
 	ScenarioContextDto scenarioContext,

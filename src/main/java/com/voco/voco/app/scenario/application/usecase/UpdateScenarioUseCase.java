@@ -24,8 +24,10 @@ public class UpdateScenarioUseCase {
 		scenario.update(
 			dto.name(),
 			dto.level(),
-			dto.aiRole(),
-			dto.userRole(),
+			dto.aiRoleEn(),
+			dto.aiRoleKo(),
+			dto.userRoleEn(),
+			dto.userRoleKo(),
 			dto.completionRule(),
 			dto.completionRuleDetail()
 		);
