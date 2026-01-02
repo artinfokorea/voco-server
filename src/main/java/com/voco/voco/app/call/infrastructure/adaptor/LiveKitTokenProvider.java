@@ -17,7 +17,7 @@ import lombok.RequiredArgsConstructor;
 public class LiveKitTokenProvider implements LiveKitTokenAdaptor {
 
 	private static final long TOKEN_TTL_SECONDS = 3600L;
-	private static final String AGENT_NAME = "voco-agent";
+	private static final String AGENT_NAME = "voco_agent";
 
 	private final LiveKitProperties liveKitProperties;
 
