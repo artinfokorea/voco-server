@@ -95,7 +95,9 @@ class UpdateScenarioApiTest {
 			"Cafe Order",
 			Level.BEGINNER,
 			"a cafe staff member",
+			"카페 직원",
 			"a customer",
+			"손님",
 			"When all required information is collected",
 			List.of("Confirm the order", "Politely end the conversation")
 		);
@@ -137,7 +139,9 @@ class UpdateScenarioApiTest {
 			"Updated Cafe Order",
 			Level.INTERMEDIATE,
 			"an updated cafe staff member",
+			"수정된 카페 직원",
 			"an updated customer",
+			"수정된 손님",
 			"Updated completion rule",
 			List.of("Updated completion detail 1", "Updated completion detail 2"),
 			new UpdateScenarioRequest.ScenarioContextRequest(
@@ -204,8 +208,10 @@ class UpdateScenarioApiTest {
 			.andExpect(status().isOk())
 			.andExpect(jsonPath("$.item.name").value("Updated Cafe Order"))
 			.andExpect(jsonPath("$.item.level").value("INTERMEDIATE"))
-			.andExpect(jsonPath("$.item.aiRole").value("an updated cafe staff member"))
-			.andExpect(jsonPath("$.item.userRole").value("an updated customer"))
+			.andExpect(jsonPath("$.item.aiRoleEn").value("an updated cafe staff member"))
+			.andExpect(jsonPath("$.item.aiRoleKo").value("수정된 카페 직원"))
+			.andExpect(jsonPath("$.item.userRoleEn").value("an updated customer"))
+			.andExpect(jsonPath("$.item.userRoleKo").value("수정된 손님"))
 			.andExpect(jsonPath("$.item.completionRule").value("Updated completion rule"))
 			.andExpect(jsonPath("$.item.conversationStates.length()").value(3))
 			.andExpect(jsonPath("$.item.conversationSlots.length()").value(2));
@@ -258,7 +264,9 @@ class UpdateScenarioApiTest {
 			null,
 			Level.BEGINNER,
 			"a cafe staff member",
+			"카페 직원",
 			"a customer",
+			"손님",
 			"completion rule",
 			null,
 			new UpdateScenarioRequest.ScenarioContextRequest("context", List.of("personality")),
@@ -289,7 +297,9 @@ class UpdateScenarioApiTest {
 			"Cafe Order",
 			null,
 			"a cafe staff member",
+			"카페 직원",
 			"a customer",
+			"손님",
 			"completion rule",
 			null,
 			new UpdateScenarioRequest.ScenarioContextRequest("context", List.of("personality")),

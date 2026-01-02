@@ -18,11 +18,17 @@ public record CreateScenarioRequest(
 	@Schema(description = "난이도", example = "BEGINNER")
 	@NotNull Level level,
 
-	@Schema(description = "AI 역할", example = "a cafe staff member")
-	@NotBlank @Size(max = 50) String aiRole,
+	@Schema(description = "AI 역할 (영어)", example = "a cafe staff member")
+	@NotBlank @Size(max = 50) String aiRoleEn,
 
-	@Schema(description = "사용자 역할", example = "a customer")
-	@NotBlank @Size(max = 50) String userRole,
+	@Schema(description = "AI 역할 (한국어)", example = "카페 직원")
+	@NotBlank @Size(max = 50) String aiRoleKo,
+
+	@Schema(description = "사용자 역할 (영어)", example = "a customer")
+	@NotBlank @Size(max = 50) String userRoleEn,
+
+	@Schema(description = "사용자 역할 (한국어)", example = "손님")
+	@NotBlank @Size(max = 50) String userRoleKo,
 
 	@Schema(description = "완료 규칙", example = "When all required information (drink_type, size, temperature) is collected")
 	@NotBlank @Size(max = 100) String completionRule,
@@ -99,8 +105,10 @@ public record CreateScenarioRequest(
 		return new CreateScenarioUseCaseDto(
 			name,
 			level,
-			aiRole,
-			userRole,
+			aiRoleEn,
+			aiRoleKo,
+			userRoleEn,
+			userRoleKo,
 			completionRule,
 			completionRuleDetail,
 			new CreateScenarioUseCaseDto.ScenarioContextDto(

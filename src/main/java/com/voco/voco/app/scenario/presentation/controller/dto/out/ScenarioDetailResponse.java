@@ -18,11 +18,17 @@ public record ScenarioDetailResponse(
 	@Schema(description = "난이도", example = "BEGINNER")
 	String level,
 
-	@Schema(description = "AI 역할", example = "a cafe staff member")
-	String aiRole,
+	@Schema(description = "AI 역할 (영어)", example = "a cafe staff member")
+	String aiRoleEn,
 
-	@Schema(description = "사용자 역할", example = "a customer")
-	String userRole,
+	@Schema(description = "AI 역할 (한국어)", example = "카페 직원")
+	String aiRoleKo,
+
+	@Schema(description = "사용자 역할 (영어)", example = "a customer")
+	String userRoleEn,
+
+	@Schema(description = "사용자 역할 (한국어)", example = "손님")
+	String userRoleKo,
 
 	@Schema(description = "완료 규칙", example = "When all required information is collected")
 	String completionRule,
@@ -100,8 +106,10 @@ public record ScenarioDetailResponse(
 			info.scenarioId(),
 			info.name(),
 			info.level(),
-			info.aiRole(),
-			info.userRole(),
+			info.aiRoleEn(),
+			info.aiRoleKo(),
+			info.userRoleEn(),
+			info.userRoleKo(),
 			info.completionRule(),
 			info.completionRuleDetail(),
 			info.scenarioContext() != null

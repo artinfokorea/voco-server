@@ -92,7 +92,9 @@ class GetScenarioDetailApiTest {
 			"Cafe Order",
 			com.voco.voco.app.scenario.domain.model.Level.BEGINNER,
 			"a cafe staff member",
+			"카페 직원",
 			"a customer",
+			"손님",
 			"When all required information is collected",
 			List.of("Confirm the order", "Politely end the conversation")
 		);
@@ -144,8 +146,10 @@ class GetScenarioDetailApiTest {
 			.andExpect(jsonPath("$.item.scenarioId").value(scenarioId))
 			.andExpect(jsonPath("$.item.name").value("Cafe Order"))
 			.andExpect(jsonPath("$.item.level").value("BEGINNER"))
-			.andExpect(jsonPath("$.item.aiRole").value("a cafe staff member"))
-			.andExpect(jsonPath("$.item.userRole").value("a customer"));
+			.andExpect(jsonPath("$.item.aiRoleEn").value("a cafe staff member"))
+			.andExpect(jsonPath("$.item.aiRoleKo").value("카페 직원"))
+			.andExpect(jsonPath("$.item.userRoleEn").value("a customer"))
+			.andExpect(jsonPath("$.item.userRoleKo").value("손님"));
 	}
 
 	@Test

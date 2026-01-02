@@ -36,7 +36,9 @@ class CreateScenarioUseCaseTest {
 			"Cafe Order",
 			Level.BEGINNER,
 			"a cafe staff member",
+			"카페 직원",
 			"a customer",
+			"손님",
 			"When all required information is collected",
 			List.of("Confirm the order", "Politely end the conversation"),
 			new CreateScenarioUseCaseDto.ScenarioContextDto(
@@ -97,8 +99,10 @@ class CreateScenarioUseCaseTest {
 			ConversationScenarioEntity savedEntity = captor.getValue();
 			assertThat(savedEntity.getName()).isEqualTo("Cafe Order");
 			assertThat(savedEntity.getLevel()).isEqualTo(Level.BEGINNER);
-			assertThat(savedEntity.getAiRole()).isEqualTo("a cafe staff member");
-			assertThat(savedEntity.getUserRole()).isEqualTo("a customer");
+			assertThat(savedEntity.getAiRoleEn()).isEqualTo("a cafe staff member");
+			assertThat(savedEntity.getAiRoleKo()).isEqualTo("카페 직원");
+			assertThat(savedEntity.getUserRoleEn()).isEqualTo("a customer");
+			assertThat(savedEntity.getUserRoleKo()).isEqualTo("손님");
 			assertThat(savedEntity.getCompletionRule()).isEqualTo("When all required information is collected");
 			assertThat(savedEntity.getCompletionRuleDetail()).containsExactly("Confirm the order", "Politely end the conversation");
 		}
@@ -210,7 +214,9 @@ class CreateScenarioUseCaseTest {
 				"Cafe Order",
 				Level.BEGINNER,
 				"a cafe staff member",
+				"카페 직원",
 				"a customer",
+				"손님",
 				"When all required information is collected",
 				null,
 				new CreateScenarioUseCaseDto.ScenarioContextDto("Context", List.of("Friendly")),
@@ -242,7 +248,9 @@ class CreateScenarioUseCaseTest {
 				"Cafe Order",
 				Level.INTERMEDIATE,
 				"a cafe staff member",
+				"카페 직원",
 				"a customer",
+				"손님",
 				"When all required information is collected",
 				null,
 				new CreateScenarioUseCaseDto.ScenarioContextDto("Context", List.of("Friendly")),
